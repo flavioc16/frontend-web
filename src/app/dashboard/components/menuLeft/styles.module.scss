@@ -1,0 +1,161 @@
+.menu {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  background-color: var(--white);
+  margin-top: 16px;
+  position: relative;
+  border-right: var(--border-width) solid var(--cinza-800);
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -var(--border-width);
+    width: var(--border-width);
+    height: 100%;
+    background-color: var(--cinza-800);
+  }
+
+  h1 {
+    display: flex;
+    background-color: var(--lilas-900);
+    color: var(--white);
+    text-indent: 1rem;
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  nav {
+    background-color: var(--lilas-900);
+    color: var(--white);
+    padding-top: 3px;
+    padding-left: 8px;
+    width: 100%;
+    flex: 1;
+    overflow: auto;
+  }
+
+  .input {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 98%;
+    background-color: var(--lilas-900);
+  }
+
+  .value {
+    background-color: transparent;
+    margin-bottom: 2px;
+    border: none;
+    padding: 6px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    position: relative;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 97.5%;
+
+    svg {
+      color: var(--cinza-800);
+      margin-left: 8px;
+      transition: color 0.3s ease; /* Transição suave para o ícone */
+    }
+
+    &:focus {
+      outline: none; /* Remove o outline de foco */
+    }
+
+    /* Hover para itens não selecionados */
+    &:not(.selected):hover {
+      background-color: var(--roxo-700);
+      
+      /* Modificando o ícone e a linha à esquerda no hover */
+      svg {
+        color: var(--red-750); /* Muda a cor do ícone no hover */
+      }
+
+      &::before {
+        opacity: 1; /* Torna a linha visível no hover */
+      }
+    }
+
+    /* Selecionado: muda a cor do fundo e do ícone */
+    &.selected {
+      background-color: var(--roxo-700);
+
+      svg {
+        color: var(--red-750);
+      }
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 0;
+      width: 2px;
+      height: 80%;
+      background-color: var(--red-750);
+      border-radius: 5px;
+      opacity: 0; /* Inicialmente invisível */
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+
+    svg {
+      width: 20px;
+    }
+  }
+
+  .input {
+    position: relative;
+  }
+
+  .filterInput {
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--cinza-800);
+    border-radius: 4px;
+    background-color: var(--lilas-800);
+    color: var(--white);
+    outline: none;
+    width: 99.9%;
+    margin-bottom: 1rem;
+  
+
+    &:focus {
+      border-color: var(--white);
+    }
+  }
+
+  .searchIcon,
+  .clearIcon {
+    position: absolute;
+    top: 34%;
+    transform: translateY(-50%);
+    color: var(--cinza-800);
+    cursor: pointer;
+    height: 24px;
+  }
+
+  .searchIcon {
+    right: 8px;
+  }
+
+  .clearIcon {
+    right: 8px;
+  }
+}

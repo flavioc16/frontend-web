@@ -1,0 +1,87 @@
+.cardCustom {
+  background-color: var(--roxo-900) !important;
+  color: #fff;
+  border: 1px solid #444;
+  width: 16.6rem; // Largura ajustada
+  height: 6.5rem; // Altura menor
+  padding: 0.5rem; // Espaçamento interno menor
+  margin-right: 1rem;
+  margin: 0.5rem; // Espaçamento externo menor
+  display: flex;
+  justify-content: center; /* Alinha o conteúdo do card ao centro horizontalmente */
+  align-items: center; /* Alinha o conteúdo do card ao centro verticalmente */
+  position: relative;  /* Necessário para o ícone flutuar em relação ao card */
+}
+
+.cardBodyCustom {
+  display: flex;
+  justify-content: space-between;  // Alinha o conteúdo nas extremidades (esquerda e direita)
+  align-items: center; /* Alinha o conteúdo verticalmente */
+  height: 100%; /* Garante que o conteúdo ocupe toda a altura do card */
+  width: 100%; /* Garante que o conteúdo ocupe toda a largura do card */
+}
+
+.iconWrapper {
+  position: absolute;
+  top: 50%;  // Ajuste conforme necessário
+  left: 15px; // Alinha o ícone à esquerda do Card
+  font-size: 24px;  // Ajuste o tamanho do ícone conforme necessário
+  color: #fff;  // Cor do ícone
+}
+
+.cardHeaderCustom {
+  background-color: var(--roxo-900) !important;
+  color: #fff;
+  font-size: 0.9rem; // Tamanho menor para o texto do cabeçalho
+  justify-content: center;
+  text-align: center;
+}
+
+.cardButtonCustom {
+  background-color: var(--roxo-900) !important;
+  color: #fff;
+  border: none;
+
+  &:hover {
+    background-color: #666; // Cor ao passar o mouse
+  }
+}
+
+.loadingIcon {
+
+  margin-bottom: 15px;
+  margin-right: 20px;
+  font-size: 24px;
+  animation: rotate 2s linear infinite; /* Adiciona animação de rotação ao ícone */
+  position: absolute; /* Necessário para posicionamento absoluto dentro do contêiner */
+  top: 50%; /* Posiciona o ícone no meio verticalmente */
+  left: 50%; /* Posiciona o ícone no meio horizontalmente */
+
+}
+
+
+.eyeIcon {
+  cursor:  not-allowed;
+}
+
+.valueContainer {
+  display: flex;
+  justify-content: space-between;  // Organiza o conteúdo entre a esquerda e direita
+  align-items: center;  // Alinha o conteúdo verticalmente no centro
+  width: 100%;  // Ocupa toda a largura disponível
+}
+
+.value {
+  font-size: 18px;  // Ajuste o tamanho do valor
+  color: #fff;  // Cor do texto
+  margin-top: 8px;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

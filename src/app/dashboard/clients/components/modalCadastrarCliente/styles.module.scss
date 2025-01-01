@@ -1,0 +1,626 @@
+.tableContainer {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  max-height: 500px; // Altura máxima da tabela
+  overflow-y: auto; // Rolagem vertical quando necessário
+  background-color: var(--lilas-900);
+  position: relative; // Certifique-se de que não há outros elementos posicionados
+}
+
+.tableWrapper {
+  position: relative;
+  background-color: var(--lilas-900);
+  padding: 1rem;
+}
+
+.header {
+  margin-bottom: 1rem;
+  background-color: var(--lilas-900);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+      color: var(--red-700);
+      margin: 0;
+      font-size: 15px;
+  }
+
+  .headerControls {
+      display: flex;
+      align-items: center;
+      gap: 1rem; // Espaço entre o campo de pesquisa e o seletor
+  }
+
+  .searchContainer {
+      position: relative;
+  
+      .filterInput {
+          padding: 0.5rem 2rem 0.5rem 0.5rem;
+          font-size: 0.875rem;
+          border: 1px solid var(--cinza-800);
+          border-radius: 4px;
+          background-color: var(--lilas-800);
+          color: var(--white);
+          outline: none;
+          width: 200px; // Ajuste a largura conforme necessário
+  
+          &:focus {
+              border-color: var(--white);
+          }
+      }
+  
+      .searchIcon {
+          position: absolute;
+          right: 0.5rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--cinza-800);
+          pointer-events: none;
+          font-size: 0.75rem; // Tamanho menor para o ícone de busca
+          transition: opacity 0.3s ease; // Adiciona transição suave para a visibilidade
+      }
+  
+      .clearIcon {
+          position: absolute;
+          right: 0.5rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--cinza-800);
+          pointer-events: auto; // Permite interação com o ícone de limpar
+          font-size: 0.75rem; // Tamanho menor para o ícone "X"
+          opacity: 0; // Inicialmente oculto
+          transition: opacity 0.3s ease; // Adiciona transição suave para a visibilidade
+      }
+  
+      .filterInput:not(:placeholder-shown) ~ .searchIcon {
+          opacity: 0; // Oculta o ícone de busca quando há texto
+      }
+  
+      .filterInput:not(:placeholder-shown) ~ .clearIcon {
+          opacity: 1; // Mostra o ícone "X" quando há texto
+      }
+  }
+
+  .resultsPerPage {
+      display: flex;
+      align-items: center;
+  
+      label {
+          margin-right: 0.5rem;
+          color: var(--white); // Cor do texto
+          font-size: 15px;
+      }
+  
+      label[for="resultsPerPage"] {
+          margin-left: 8px; // Ajuste conforme necessário
+      }
+  
+      select {
+          background-color: var(--lilas-800); // Cor de fundo do seletor
+          color: var(--white); // Cor do texto do seletor
+          border: 1px solid var(--cinza-800); // Borda do seletor
+          border-radius: 4px;
+          padding: 0.5rem;
+          font-size: 0.875rem; // Tamanho da fonte
+          cursor: pointer;
+          outline: none;
+          transition: background-color 0.3s ease, border-color 0.3s ease;
+  
+          background-position: calc(100% - 20px) center; // Movido mais para a esquerda
+          background-repeat: no-repeat;
+          background-size: 12px; // Tamanho do ícone
+  
+          &::-ms-expand {
+              display: none;
+          }
+  
+          &::-webkit-scrollbar {
+              width: 8px;
+          }
+  
+          &::-webkit-scrollbar-thumb {
+              background-color: var(--cinza-600);
+              border-radius: 4px;
+          }
+  
+          &:focus {
+              border-color: var(--white);
+              background-color: var(--lilas-700);
+          }
+  
+          max-height: 200px;
+          overflow-y: auto;
+  
+          option {
+              background-color: var(--roxo-900);
+              color: var(--white);
+          }
+      }
+  }
+}
+
+.clientsTable {
+  width: 100%;
+  border-radius: 8px;
+  background-color: var(--lilas-900);
+  position: relative;
+  border-collapse: collapse;
+
+  .noHoverEffect {
+      &:hover {
+          background-color: inherit;
+      }
+  }
+
+  th, td {
+      border: 0.8px solid var(--cinza-800);
+      padding: 4px;
+      font-size: 0.90rem;
+      min-width: 80px;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+      color: var(--gray-200);
+  }
+
+  th {
+      background-color: var(--roxo-700);
+      color: var(--white);
+      font-weight: bold;
+      padding: 10px;
+      min-height: 100px;
+  }
+
+  td {
+      text-align: start;
+  }
+
+  td:last-child {
+      text-align: center;
+  }
+
+  tr {
+      color: var(--gray-100);
+  }
+
+  tr:nth-child(even) {
+      background-color: var(--lilas-900);
+  }
+
+  tr:hover {
+      background-color: var(--roxo-700);
+  }
+
+  tr:has(.noRecords):hover {
+    background-color: initial; // ou outro valor para remover o efeito
+  }
+
+  .iconUser{
+    color: var(--cinza-600);
+    padding: 2px;
+    margin-right: 4px;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+  .iconTrash{
+    color: var(--red-750);
+    padding: 2px;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  .iconPlus, .iconInfo {
+      gap: 4px;
+      padding: 2px;
+      font-size: 0.625rem;
+      color: var(--cinza-700);
+      transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .iconPlus:hover, .iconInfo:hover {
+      color: var(--white);
+      transform: scale(1.1);
+  }
+}
+
+.customTooltip {
+  
+  font-size: 14px !important; /* Tamanho da fonte */
+
+  .tooltip-arrow::before {
+    border-top-color: #3498db !important; /* Cor da seta */
+  }
+}
+
+
+.ellipsis {
+  margin-top: 10px;
+  color: var(--gray-100);
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.ppage {
+  margin-left: 9px;
+}
+
+.noRecords {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1rem;
+  margin-right: 1px;
+
+  &.hidden {
+      display: none;
+  }
+
+  button {
+      background-color: var(--lilas-800);
+      color: var(--white);
+      border: 1px solid var(--cinza-800);
+      border-radius: 4px;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:disabled {
+          background-color: var(--cinza-600);
+          cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+          background-color: var(--lilas-700);
+      }
+
+      svg {
+          width: 30px;
+          height: 15px;
+      }
+  }
+
+  .pageNumber {
+      background-color: var(--lilas-800);
+      color: var(--white);
+      border: 1px solid var(--cinza-800);
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: background-color 0.3s ease;
+      margin: 0 0.25rem;
+
+      &.active {
+          background-color: var(--lilas-700);
+          border-color: var(--lilas-700);
+          font-weight: bold;
+      }
+
+      &:hover {
+          background-color: var(--lilas-700);
+      }
+  }
+}
+
+.customModal {
+  display: none;
+  
+  &.show {
+      display: block;
+  }
+
+  h2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 2px;
+      background-color: #1f242a;
+      padding: 10px 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+  }
+  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  z-index: 1050;
+
+  .customModalHeader,
+  .customModalBody,
+  .customModalFooter {
+      background-color: var(--roxo-900);
+  }
+}
+
+.customModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3d3d3d;
+  padding: 1rem;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+} 
+
+.customModalBody {
+  padding: 1.5rem;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+  
+.closeButton {
+  background-color: transparent; /* Fundo transparente para o botão */
+  border: none; /* Remove a borda padrão */
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+  padding: 0; /* Remove padding padrão */
+  display: flex; /* Usa flexbox para centralizar o ícone */
+  align-items: center; /* Alinha o ícone verticalmente */
+  justify-content: center; /* Alinha o ícone horizontalmente */
+  border-radius: 50%; /* Torna o botão redondo */
+  width: 40px; /* Ajuste o tamanho do botão */
+  height: 40px; /* Ajuste o tamanho do botão */
+  
+
+  svg {
+    /* Estiliza o ícone */
+    font-size: 24px; /* Ajuste o tamanho do ícone conforme necessário */
+  }
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Adiciona uma sombra redonda no hover */
+  }
+}
+   
+.customFormGroup {
+  margin-bottom: 1rem;
+}
+
+.inputContainer {
+  position: relative; /* Garantir que o contêiner tenha posição relativa */
+}
+
+.icon {
+  position: absolute; /* Coloca o ícone dentro do campo de input */
+  right: 10px; /* Ajuste o valor para garantir que o ícone fique na borda direita */
+  top: 50%; /* Centraliza o ícone verticalmente */
+  color: var(--lilas-900);
+  transform: translateY(-50%); /* Ajuste para alinhamento perfeito */
+  cursor: pointer; /* Adiciona um cursor de ponteiro ao ícone */
+}
+
+.customFormLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+  
+
+.customBtnPrimary {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+} 
+
+.customBtnSecondary {
+  background-color: #6c757d;
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+  
+.customModalFooter {
+  padding: 10px;
+  text-align: right;
+}
+  
+.customFormControl {
+  background-color: #2d2d2d;
+    color:var(--white);
+    border: 1px solid #3d3d3d;
+    height: 34px;
+    font-size: 16px;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+
+.customFormLabel {
+  color: #FFF;
+  font-size: 16px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end; /* Alinha os botões à direita */
+  margin-top: 25px; /* Adiciona um espaço acima dos botões */
+
+  button {
+    margin-left: 10px; /* Adiciona espaço entre os botões */
+  }
+}
+
+.customBtnPrimary {
+  background-color: green;
+  border: none;
+  color: #FFF;
+  padding: 8.5px 20px; /* Ajuste o padding conforme necessário */
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darkgreen;
+  }
+
+  &:focus,
+  &:active {
+    background-color: darkgreen;
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.customBtnSecondary {
+  background-color: #21262c;
+  border: 1px solid #21262c;
+  color: #FFF;
+  border-radius: 4px;
+  padding: 8px 20px; /* Ajuste o padding conforme necessário */
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1d2228; /* Um tom ainda mais próximo de #21262c */
+    border-color: #21262c; /* Mantém a borda na cor original */
+  }
+
+  &:focus,
+  &:active {
+    background-color: #1d2228;
+  }
+}
+  
+.customFormLabel {
+    color: #FFF;
+    margin-top: 10px;
+    margin-bottom: 1px;
+    font-size: 16px;
+}
+    
+/* styles.module.scss */
+.Popover {
+  background-color: #2d333b; // Fundo escuro para o Popover
+  color: #c9d1d9; // Cor do texto clara
+  border: 1px solid #30363d; // Borda levemente mais clara
+
+  .popover-arrow {
+    &:before {
+      border-width: 6px;
+      border-style: solid;
+      border-color: #2d333b transparent transparent transparent !important; // Cor da seta
+    }
+  }
+}
+  
+.PopoverHeader {
+  background-color: #21262d; // Fundo escuro do cabeçalho do Popover
+  color: #c9d1d9; // Cor do texto clara
+  border-bottom: 1px solid #30363d; // Borda inferior do cabeçalho
+  
+}
+  
+.PopoverBody {
+  color: #c9d1d9; // Cor do texto clara
+}
+  
+  
+
+.loadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh; // Tamanho do spinner para centralizá-lo verticalmente
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--red-900);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+.infoOptions {
+  position: fixed;
+  //background-color: #21262d;
+  background-color: var(--roxo-900);
+  color: #fff;
+  border: 1px solid #30363d; // Borda levemente mais clara
+  padding: 5px;
+  z-index: 9999; /* Muito acima dos outros elementos */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.infoOptions button {
+  display: block;
+  background: none; /* Remover fundo padrão */
+  color: #fff; /* Texto claro */
+  border: none; /* Remover borda padrão */
+  padding: 5px;
+  margin-bottom: 5px;
+  cursor: pointer; /* Cursor pointer para indicar clicável */
+  transition: background-color 0.3s; /* Transição suave para o efeito hover */
+}
+
+.infoOptions button:hover {
+  background-color: #444; /* Efeito hover */
+}
+
+.buttonLike {
+  color: white;
+  padding: 0.5rem ;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  display: block;
+  margin-bottom: 0.5rem;  // Adiciona espaçamento vertical
+
+  // Remove o margin-bottom do último elemento para evitar um espaçamento extra no final
+  &:last-child {
+    margin-bottom: 0;
+    &:hover{
+      background-color: var(--red-900);
+    }
+  }
+}
+.icon {
+  width: 1rem; /* Ajuste o tamanho conforme necessário */
+  height: 1rem; /* Ajuste o tamanho conforme necessário */
+  margin-left: 5px;
+  float: right;
+}
+
+
+
+
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+

@@ -1,0 +1,21 @@
+.Btn {
+    background-color: #21262d; // Fundo escuro GitHub
+    border: 1px solid #30363d; // Borda levemente mais clara
+    border-radius: 4px; // Bordas arredondadas
+    color: #c9d1d9; // Cor do texto clara (usada no GitHub)
+    font-size: 14px; // Tamanho da fonte
+    padding: 2px 8px; // Padding
+    cursor: pointer; // Cursor pointer
+    font-weight: 500; // Peso da fonte mais forte
+    text-align: center;
+    display: inline-flex; /* Corrigido para inline-flex para alinhar o ícone com o texto */
+    align-items: center; /* Alinha o conteúdo verticalmente */
+  }
+  
+  .Icon {
+    display: inline-block; /* Flex pode não ser necessário para SVGs */
+    margin-left: 4px; /* Espaço entre o ícone e o texto */
+  }
+
+  
+  

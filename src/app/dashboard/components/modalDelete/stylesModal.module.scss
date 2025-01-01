@@ -1,0 +1,112 @@
+.customModal {
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 2px;
+    padding: 5px 8px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.1); /* Fundo semi-transparente */
+  z-index: 1050;
+
+  .customModalHeader,
+  .customModalBody,
+  .customModalFooter {
+    background-color: var(--roxo-900);
+  }
+}
+
+
+  
+.customModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3d3d3d;
+  padding: 1rem;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+  
+.customModalBody {
+  padding: 1.5rem;
+
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+  
+.closeButton {
+  background-color: transparent; /* Fundo transparente para o botão */
+  border: none; /* Remove a borda padrão */
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+  padding: 0; /* Remove padding padrão */
+  display: flex; /* Usa flexbox para centralizar o ícone */
+  align-items: center; /* Alinha o ícone verticalmente */
+  justify-content: center; /* Alinha o ícone horizontalmente */
+  border-radius: 50%; /* Torna o botão redondo */
+  width: 30px; /* Ajuste o tamanho do botão */
+  height: 30px; /* Ajuste o tamanho do botão */
+  
+
+  svg {
+    /* Estiliza o ícone */
+    font-size: 20px; /* Ajuste o tamanho do ícone conforme necessário */
+  }
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* Adiciona uma sombra ao redor do botão no hover */
+    width: 30px; /* Define o tamanho do botão no hover */
+    height: 30px; /* Define o tamanho do botão no hover */
+  }
+}
+
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between; /* Espaça os botões igualmente */
+  gap: 1rem; /* Adiciona espaçamento entre os botões */
+}
+
+.customBtnPrimary,
+.customBtnSecondary {
+  background-color: var(--red-900);
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  flex: 1; /* Faz com que os botões tenham o mesmo tamanho */
+}
+
+.customBtnPrimary {
+  &:hover {
+    background-color: var(--red-800); /* Um tom mais escuro de vermelho */
+    border-color: var(--red-900); /* Mantém a borda na cor original */
+  }
+}
+
+.customBtnSecondary {
+  background-color: #21262c;
+  
+  &:hover {
+    background-color: #1d2228; /* Um tom mais escuro */
+    border-color: #21262c; /* Mantém a borda na cor original */
+  }
+}
+
+

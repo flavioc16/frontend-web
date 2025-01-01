@@ -1,0 +1,553 @@
+
+.tableContainer {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    max-height: 500px; // Altura máxima da tabela
+    overflow-y: auto; // Rolagem vertical quando necessário
+    background-color: var(--lilas-900);
+    position: relative; // Certifique-se de que não há outros elementos posicionados
+}
+
+.tableWrapper {
+    position: relative;
+    background-color: var(--lilas-900);
+    padding: 0 1rem;
+}
+
+.header {
+    margin-bottom: 1rem;
+    background-color: var(--lilas-900);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+        color: #c24c4c;
+        margin: 0;
+        font-size: 15px;
+    }
+
+    .headerControls {
+        display: flex;
+        align-items: center;
+        gap: 1rem; // Espaço entre o campo de pesquisa e o seletor
+    }
+
+    .searchContainer {
+        position: relative;
+    
+        .filterInput {
+            padding: 0.5rem 2rem 0.5rem 0.5rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--cinza-800);
+            border-radius: 4px;
+            background-color: var(--lilas-800);
+            color: var(--white);
+            outline: none;
+            width: 200px; // Ajuste a largura conforme necessário
+    
+            &:focus {
+                border-color: var(--white);
+            }
+        }
+    
+        .searchIcon {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cinza-800);
+            pointer-events: none;
+            font-size: 0.75rem; // Tamanho menor para o ícone de busca
+            transition: opacity 0.3s ease; // Adiciona transição suave para a visibilidade
+        }
+    
+        .clearIcon {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cinza-800);
+            pointer-events: auto; // Permite interação com o ícone de limpar
+            font-size: 0.75rem; // Tamanho menor para o ícone "X"
+            opacity: 0; // Inicialmente oculto
+            transition: opacity 0.3s ease; // Adiciona transição suave para a visibilidade
+        }
+    
+        .filterInput:not(:placeholder-shown) ~ .searchIcon {
+            opacity: 0; // Oculta o ícone de busca quando há texto
+        }
+    
+        .filterInput:not(:placeholder-shown) ~ .clearIcon {
+            opacity: 1; // Mostra o ícone "X" quando há texto
+        }
+    }
+}
+
+.resultsPerPage {
+    display: flex;
+    justify-content: space-between; /* Garantir que o título fique à esquerda e o seletor à direita */
+    align-items: center;
+    width: 100%; /* Garantir que ocupe toda a largura disponível */
+  
+    h1.pageTitle {
+        margin-right: 610px; /* Remover margem do título */
+        text-align: left; /* Alinhar o título à esquerda */
+    }
+  
+    label {
+        margin-right: 0.5rem;
+        color: var(--white); /* Cor do texto */
+        font-size: 15px;
+    }
+  
+    label[for="resultsPerPage"] {
+        margin-left: 8px; /* Ajuste conforme necessário */
+    }
+  
+    select {
+        background-color: var(--lilas-800); /* Cor de fundo do seletor */
+        color: var(--white); /* Cor do texto do seletor */
+        border: 1px solid var(--cinza-800); /* Borda do seletor */
+        border-radius: 4px;
+        padding: 0.5rem;
+        font-size: 0.875rem; /* Tamanho da fonte */
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+  
+        /* Ajuste do ícone para a esquerda */
+        background-position: calc(100% - 20px) center; /* Movido mais para a esquerda */
+        background-repeat: no-repeat;
+        background-size: 12px; /* Tamanho do ícone */
+  
+        /* Remove a seta padrão do seletor para estilizar com mais controle */
+        &::-ms-expand {
+            display: none;
+        }
+  
+        /* Adiciona uma altura fixa e rolagem se necessário */
+        &::-webkit-scrollbar {
+            width: 8px; /* Largura da barra de rolagem */
+        }
+  
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--cinza-600); /* Cor da parte deslizante da barra de rolagem */
+            border-radius: 4px;
+        }
+  
+        &:focus {
+            border-color: var(--white); /* Cor da borda ao focar no seletor */
+            background-color: var(--lilas-700); /* Cor de fundo ao focar */
+        }
+  
+        /* Altura máxima e rolagem se necessário */
+        max-height: 200px; /* Define uma altura máxima para o seletor */
+        overflow-y: auto; /* Adiciona rolagem vertical se necessário */
+  
+        /* Estilo para a opção selecionada */
+        option {
+            background-color: var(--roxo-900); /* Cor de fundo das opções */
+            color: var(--white); /* Cor do texto das opções */
+        }
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end; /* Alinha o conteúdo da header à direita */
+    width: 100%;
+}
+
+.headerControls {
+    display: flex;
+    justify-content: flex-end; /* Alinha os controles dentro de headerControls à direita */
+    align-items: center;
+    gap: 1rem; /* Ajuste o espaço entre os elementos conforme necessário */
+}
+
+.searchContainer {
+    display: flex;
+    align-items: center;
+}
+
+.customSelect {
+    background-color: var(--lilas-800);
+    color: var(--white);
+    border: 1px solid var(--cinza-800);
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.filterInput {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    border: 1px solid var(--cinza-800);
+    color: var(--white);
+    background-color: var(--lilas-800);
+}
+
+.clearIcon {
+    cursor: pointer;
+    color: var(--white);
+}
+
+.searchIcon {
+    cursor: pointer;
+    color: var(--white);
+}
+
+
+.comprasTable {
+    width: 100%;
+    table-layout: fixed; /* Faz com que as larguras sejam fixas */
+    border-radius: 8px;
+    background-color: var(--lilas-900);
+    border-collapse: collapse;
+  
+    th, td {
+        border: 0.8px solid var(--cinza-800);
+        padding: 4px;
+        font-size: 0.90rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+        color: var(--gray-200);
+    }
+  
+    th {
+        background-color: var(--roxo-700);
+        color: var(--white);
+        font-weight: bold;
+        padding: 10px;
+        text-align: left;
+    }
+  
+    /* Coluna Data */
+    th:nth-child(1), td:nth-child(1) {
+        width: 15%; /* Menor proporção */
+        text-align: center;
+    }
+    
+    /* Coluna Descrição */
+    th:nth-child(2), td:nth-child(2) {
+        width: 25%; /* Maior proporção */
+    }
+    
+    /* Coluna Total */
+    th:nth-child(3), td:nth-child(3) {
+        width: 40%; /* Menor proporção */
+    }
+    
+    /* Coluna Ação */
+    th:nth-child(4), td:nth-child(4) {
+        width: 15%; /* Menor proporção */
+        text-align: inherit;
+    }
+    /* Coluna Ação */
+    th:nth-child(5), td:nth-child(5) {
+        width: 10%; /* Menor proporção */
+        text-align: center;
+    }
+  
+    tr:nth-child(even) {
+        background-color: var(--lilas-900);
+    }
+  
+    tr:hover {
+        background-color: var(--roxo-700);
+    }
+
+    tr:has(.noRecords):hover {
+        background-color: initial; // ou outro valor para remover o efeito
+    }
+
+    .iconPlus {
+        gap: 4px; /* Ajusta o espaço entre os ícones */
+        padding: 2px; // Ajusta o padding dentro da célula da ação
+        font-size: 0.625rem; // Ajusta o tamanho da fonte dos ícones de ação
+        font-size: 0.75rem; /* Ajuste o tamanho dos ícones */
+        color: var(--gray-200); /* Ajuste a cor dos ícones conforme necessário */
+        transition: opacity 0.3s ease; /* Adiciona transições suaves */
+    }
+  
+    .iconInfo {
+        gap: 4px; /* Ajusta o espaço entre os ícones */
+        padding: 2px; // Ajusta o padding dentro da célula da ação
+        font-size: 0.625rem; // Ajusta o tamanho da fonte dos ícones de ação
+        font-size: 0.75rem; /* Ajuste o tamanho dos ícones */
+        color: #345bbdf7; /* Ajuste a cor dos ícones conforme necessário */
+        transition: opacity 0.3s ease; /* Adiciona transições suaves */
+    }
+
+    .vencida {
+        position: relative; /* Necessário para o ::before */
+        background-color: rgb(238, 90, 90) !important;
+        border-radius: 8px; /* Arredondamento do canto da linha */
+        color: black; /* Define a cor do texto como preto */
+    
+        &:hover {
+            background-color: rgb(212, 110, 110) !important;
+        }
+    }
+    
+    .vencida td {
+        color: rgb(240, 223, 223); /* Certifique-se de que o texto das células também seja preto */
+    }
+
+    .vencida .iconInfo {
+        color: #ffffff; /* Cor para destacar quando for vencida */
+        font-weight: bold; /* Deixa os ícones um pouco mais destacados */
+        transition: color 0.3s ease; /* Transição suave para a mudança de cor */
+    }
+
+    .aprovada {
+        background-color:  #9adb9a !important;
+        color: #155724; /* Texto verde escuro */
+        border-radius: 8px; /* Arredondamento dos cantos */
+        
+        td { /* Estilos aplicados às células da linha */
+            color: #155724;  /* Cor do texto nas células */
+        }
+      
+        &:hover {
+            background-color: #abe0b7 !important;
+        }
+    }
+      
+    .aprovada .iconInfo {
+        color: #155724; /* Cor do texto nas células */
+        font-weight: bold; /* Deixa os ícones um pouco mais destacados */
+        transition: color 0.3s ease; /* Transição suave para a mudança de cor */
+    }
+
+    /* Estilo original, para as linhas que não são vencidas */
+    .iconInfo {
+        gap: 4px; /* Ajusta o espaço entre os ícones */
+        padding: 2px; /* Ajusta o padding dentro da célula da ação */
+        font-size: 0.75rem; /* Ajuste o tamanho dos ícones */
+        color: #345bbd; /* Cor padrão dos ícones */
+        transition: color 0.3s ease; /* Adiciona transições suaves */
+    }
+    
+    .iconPlus:hover {
+        transform: scale(1.1); /* Aumenta o ícone ligeiramente ao passar o mouse */
+    }
+
+    .iconInfo:hover {
+        transform: scale(1.1); /* Aumenta o ícone ligeiramente ao passar o mouse */
+    }
+ 
+    .totalValue {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .totalLabel {
+        text-align: left;
+        padding: 10px;
+    }
+
+    tr.totalRow:hover {
+        background-color: initial; /* Ou outro valor para remover o efeito de hover */
+    }
+    
+    .iconTrash{
+        color: var(--red-750);
+        padding: 2px;
+    
+        &:hover {
+          transform: scale(1.2);
+        }
+    }
+}
+
+.tableCell {
+    position: relative; /* Necessário para o posicionamento correto da bolinha */
+    padding-left: 20px; /* Ajuste para garantir que o indicador tenha espaço */
+    padding-right: 10px; /* Espaço da direita */
+}
+  
+.serviceIndicator {
+    position: absolute; /* Indicador fixo dentro da célula */
+    top: 50%; /* Centraliza verticalmente */
+    left: 18px; /* Ajuste horizontal */
+    transform: translateY(-50%); /* Centraliza verticalmente */
+    width: 8px;
+    height: 8px;
+    background-color: #3c86ee; /* Cor da bolinha */
+    border-radius: 50%;
+}
+     
+.ellipsis {
+    margin-top: 10px;
+    color: var(--gray-100); // Ajuste a cor conforme necessário
+    font-size: 1rem; // Ajuste o tamanho da fonte se necessário
+    font-weight: bold; // Ajuste o peso da fonte se necessário
+}
+
+.ppage {
+    margin-left: 9px;
+}
+
+.noRecords {
+    text-align: center; // Alinha horizontalmente no centro
+    color: #888;
+    font-style: italic;
+    padding: 1rem;
+    width: 100%; // Garante que a célula ocupe toda a largura disponível
+    height: 100%; // Garante que a célula ocupe toda a altura disponível
+    vertical-align: middle; // Alinha verticalmente no meio
+    display: table-cell; // Garante que a célula se comporte como uma célula de tabela
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;  // Para distribuir os itens (botões e paginação)
+    align-items: center;  // Alinha verticalmente os itens ao centro
+    width: 100%;  // Garantir que ocupe toda a largura
+    gap: 1rem;  // Adiciona espaçamento entre os itens
+    margin-top: 1rem;
+}
+  
+.buttonsContainer {
+    display: flex;  // Alinha os botões na horizontal
+    gap: 0.5rem;  // Espaçamento entre os botões
+    align-items: center;  // Alinha verticalmente os botões
+}
+  
+.pagination {
+    display: flex;
+    justify-content: flex-end;  // Garante que a paginação fique na extrema direita
+    align-items: center;
+    margin: 0;  // Remover qualquer margem extra
+    padding: 0; // Garantir que o padding não cause desalinhamento
+  
+    &.hidden {
+      display: none;
+    }
+  
+    button {
+      background-color: var(--lilas-800);
+      color: var(--white);
+      border: 1px solid var(--cinza-800);
+      border-radius: 4px;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      &:disabled {
+        background-color: var(--cinza-600);
+        cursor: not-allowed;
+      }
+  
+      &:hover:not(:disabled) {
+        background-color: var(--lilas-700);
+      }
+  
+      svg {
+        width: 30px;
+        height: 15px;
+      }
+    }
+  
+    .pageNumber {
+      background-color: var(--lilas-800);
+      color: var(--white);
+      border: 1px solid var(--cinza-800);
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: background-color 0.3s ease;
+      margin: 0 0.25rem;
+  
+      &.active {
+        background-color: var(--lilas-700);
+        border-color: var(--lilas-700);
+        font-weight: bold;
+      }
+  
+      &:hover {
+        background-color: var(--lilas-700);
+      }
+    }
+}
+
+.pagination {
+    margin-left: auto; // Move a paginação para o lado direito
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.customBtnPrimary {
+    background-color: green;
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgb(22, 139, 22);
+    }
+}
+  
+.loadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh; // Tamanho do spinner para centralizá-lo verticalmente
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--red-900);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+.Popover {
+    background-color: #2d333b; // Fundo escuro para o Popover
+    color: #c9d1d9; // Cor do texto clara
+    border: 1px solid #30363d; // Borda levemente mais clara
+  
+    .popover-arrow {
+        &:before {
+            border-width: 6px;
+            border-style: solid;
+            border-color: #2d333b transparent transparent transparent !important; // Cor da seta
+        }
+    }
+}
+    
+.PopoverHeader {
+    background-color: #21262d; // Fundo escuro do cabeçalho do Popover
+    color: #c9d1d9; // Cor do texto clara
+    border-bottom: 1px solid #30363d; // Borda inferior do cabeçalho
+    
+}
+    
+.PopoverBody {
+    color: #c9d1d9; // Cor do texto clara
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+  

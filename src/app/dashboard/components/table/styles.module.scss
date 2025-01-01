@@ -1,0 +1,491 @@
+
+.tableContainer {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    max-height: 500px; // Altura máxima da tabela
+    overflow-y: auto; // Rolagem vertical quando necessário
+    background-color: var(--lilas-900);
+    position: relative; // Certifique-se de que não há outros elementos posicionados
+}
+
+.tableWrapper {
+    position: relative;
+    background-color: var(--lilas-900);
+    padding-top: 0.5rem;  // Espaçamento superior
+    padding-right: 1rem; // Espaçamento direito
+    padding-bottom: 0.5rem; // Espaçamento inferior
+    padding-left: 0.6rem; // Espaçamento esquerdo
+  }
+  
+
+.header {
+    margin-bottom: 1rem;
+    background-color: var(--lilas-900);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+        color: #c24c4c;
+        margin: 0;
+        font-size: 15px;
+    }
+
+    .headerControls {
+        display: flex;
+        align-items: center;
+        gap: 1rem; // Espaço entre o campo de pesquisa e o seletor
+    }
+
+    .searchContainer {
+        position: relative;
+    
+        .filterInput {
+            padding: 0.5rem 2rem 0.5rem 0.5rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--cinza-800);
+            border-radius: 4px;
+            background-color: var(--lilas-800);
+            color: var(--white);
+            outline: none;
+            width: 200px; // Ajuste a largura conforme necessário
+    
+            &:focus {
+                border-color: var(--white);
+            }
+        }
+    
+        .searchIcon {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cinza-800);
+            pointer-events: none;
+            font-size: 0.75rem; // Tamanho menor para o ícone de busca
+            transition: opacity 0.3s ease; // Adiciona transição suave para a visibilidade
+        }
+    
+        .clearIcon {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cinza-800);
+            pointer-events: auto; // Permite interação com o ícone de limpar
+            font-size: 0.75rem; // Tamanho menor para o ícone "X"
+            opacity: 0; // Inicialmente oculto
+            transition: opacity 0.3s ease; // Adiciona transição suave para a visibilidade
+        }
+    
+        .filterInput:not(:placeholder-shown) ~ .searchIcon {
+            opacity: 0; // Oculta o ícone de busca quando há texto
+        }
+    
+        .filterInput:not(:placeholder-shown) ~ .clearIcon {
+            opacity: 1; // Mostra o ícone "X" quando há texto
+        }
+    }
+
+    .resultsPerPage {
+        display: flex;
+        align-items: center;
+    
+        label {
+            margin-right: 0.5rem;
+            color: var(--white); // Cor do texto
+            font-size: 15px;
+        }
+    
+        label[for="resultsPerPage"] {
+            margin-left: 8px; // Ajuste conforme necessário
+        }
+    
+        select {
+            background-color: var(--lilas-800); // Cor de fundo do seletor
+            color: var(--white); // Cor do texto do seletor
+            border: 1px solid var(--cinza-800); // Borda do seletor
+            border-radius: 4px;
+            padding: 0.5rem;
+            font-size: 0.875rem; // Tamanho da fonte
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+    
+            // Ajuste do ícone para a esquerda
+            background-position: calc(100% - 20px) center; // Movido mais para a esquerda
+            background-repeat: no-repeat;
+            background-size: 12px; // Tamanho do ícone
+    
+            // Remove a seta padrão do seletor para estilizar com mais controle
+            &::-ms-expand {
+                display: none;
+            }
+    
+            // Adiciona uma altura fixa e rolagem se necessário
+            &::-webkit-scrollbar {
+                width: 8px; // Largura da barra de rolagem
+            }
+    
+            &::-webkit-scrollbar-thumb {
+                background-color: var(--cinza-600); // Cor da parte deslizante da barra de rolagem
+                border-radius: 4px;
+            }
+    
+            &:focus {
+                border-color: var(--white); // Cor da borda ao focar no seletor
+                background-color: var(--lilas-700); // Cor de fundo ao focar
+            }
+    
+            // Altura máxima e rolagem se necessário
+            max-height: 200px; // Define uma altura máxima para o seletor
+            overflow-y: auto; // Adiciona rolagem vertical se necessário
+    
+            // Estilo para a opção selecionada
+            option {
+                background-color: var(--roxo-900); // Cor de fundo das opções
+                color: var(--white); // Cor do texto das opções
+            }
+        }
+    }  
+}
+
+.clientsTable {
+    width: 100%;
+    background-color: var(--lilas-900);
+    position: relative;
+    border-collapse: collapse;
+
+    th, td {
+        border: 0.8px solid var(--cinza-800);
+        padding: 4px; // Reduz o padding para tornar as células mais finas
+        font-size: 0.90rem; // Reduz o tamanho da fonte
+        min-width: 80px; // Ajusta a largura mínima das células
+        max-width: 150px; // Ajusta a largura máxima das células
+        overflow: hidden;
+        text-overflow: ellipsis; // Adiciona reticências para texto que ultrapassa o tamanho da célula
+        white-space: nowrap;
+        vertical-align: middle; // Alinha verticalmente no meio
+        color:var(--gray-200)
+    }
+
+    th {
+        background-color: var(--roxo-700); // Ajusta a cor de fundo dos cabeçalhos
+        color: var(--white);
+        font-weight: bold;
+        padding: 10px; // Aumenta o padding para maior altura
+        min-height: 100px; // Define uma altura mínima para os cabeçalhos
+    }
+
+    td {
+        text-align: start;
+    }
+
+    td:last-child {
+        text-align: center;
+    }
+   
+
+    tr {
+        color: var(--gray-100);
+    }
+
+    tr:nth-child(even) {
+        background-color: var(--lilas-900);
+    }
+
+    tr:hover {
+        background-color: var(--roxo-700);
+    }
+    
+    tr:has(.noRecords):hover {
+        background-color: initial; // ou outro valor para remover o efeito
+    }
+
+    .iconPlus {
+        gap: 4px; /* Ajusta o espaço entre os ícones */
+        padding: 2px; // Ajusta o padding dentro da célula da ação
+        font-size: 0.625rem; // Ajusta o tamanho da fonte dos ícones de ação
+        font-size: 0.75rem; /* Ajuste o tamanho dos ícones */
+        color: var(--gray-200); /* Ajuste a cor dos ícones conforme necessário */
+        transition: opacity 0.3s ease; /* Adiciona transições suaves */
+    }
+
+    .iconInfo {
+        gap: 4px; /* Ajusta o espaço entre os ícones */
+        padding: 2px; // Ajusta o padding dentro da célula da ação
+        font-size: 0.625rem; // Ajusta o tamanho da fonte dos ícones de ação
+        font-size: 0.75rem; /* Ajuste o tamanho dos ícones */
+        color: #345bbdf7; /* Ajuste a cor dos ícones conforme necessário */
+        transition: opacity 0.3s ease; /* Adiciona transições suaves */
+    }
+
+    .iconPlus:hover {
+        transform: scale(1.3); /* Aumenta o ícone ligeiramente ao passar o mouse */
+    }
+
+    .iconInfo:hover {
+        transform: scale(1.1); /* Aumenta o ícone ligeiramente ao passar o mouse */
+    }
+}
+
+.ellipsis {
+    margin-top: 10px;
+    color: var(--gray-100); // Ajuste a cor conforme necessário
+    font-size: 1rem; // Ajuste o tamanho da fonte se necessário
+    font-weight: bold; // Ajuste o peso da fonte se necessário
+}
+
+.ppage {
+    margin-left: 9px;
+}
+
+.noRecords {
+    text-align: center; // Alinha horizontalmente no centro
+    color: #888;
+    font-style: italic;
+    padding: 1rem;
+    width: 100%; // Garante que a célula ocupe toda a largura disponível
+    height: 100%; // Garante que a célula ocupe toda a altura disponível
+    vertical-align: middle; // Alinha verticalmente no meio
+    display: table-cell; // Garante que a célula se comporte como uma célula de tabela
+}
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1rem;
+    margin-right: 1px;
+
+    // Esconde a paginação se não houver resultados
+    &.hidden {
+        display: none;
+    }
+
+    button {
+        background-color: var(--lilas-800);
+        color: var(--white);
+        border: 1px solid var(--cinza-800);
+        border-radius: 4px;
+        padding: 0.5rem;
+        cursor: pointer;
+        font-size: 0.75rem; // Tamanho menor para o texto do botão
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:disabled {
+            background-color: var(--cinza-600);
+            cursor: not-allowed;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: var(--lilas-700);
+        }
+
+        svg {
+            width: 30px; // Ajuste o tamanho dos ícones de navegação
+            height: 15px; // Ajuste o tamanho dos ícones de navegação
+        }
+    }
+
+    .pageNumber {
+        background-color: var(--lilas-800);
+        color: var(--white);
+        border: 1px solid var(--cinza-800);
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-size: 0.75rem;
+        transition: background-color 0.3s ease;
+        margin: 0 0.25rem;
+
+        &.active {
+            background-color: var(--lilas-700);
+            border-color: var(--lilas-700);
+            font-weight: bold;
+        }
+
+        &:hover {
+            background-color: var(--lilas-700);
+        }
+    }
+}
+
+//MODAL
+.customModal {
+    display: none;
+    
+    &.show {
+        display: block;
+    }
+  
+    h2 {
+        font-size: 15px;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 2px;
+        background-color: #1f242a;
+        padding: 10px 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    z-index: 1050;
+  
+    .customModalHeader,
+    .customModalBody,
+    .customModalFooter {
+        background-color: var(--roxo-900);
+    }
+}
+  
+.customModalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3d3d3d;
+    padding: 1rem;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+} 
+  
+.customModalBody {
+    padding: 1.5rem;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.closeButton {
+    background-color: transparent; /* Fundo transparente para o botão */
+    border: none; /* Remove a borda padrão */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+    padding: 0; /* Remove padding padrão */
+    display: flex; /* Usa flexbox para centralizar o ícone */
+    align-items: center; /* Alinha o ícone verticalmente */
+    justify-content: center; /* Alinha o ícone horizontalmente */
+    border-radius: 50%; /* Torna o botão redondo */
+    width: 40px; /* Ajuste o tamanho do botão */
+    height: 40px; /* Ajuste o tamanho do botão */
+    
+  
+    svg {
+      /* Estiliza o ícone */
+      font-size: 24px; /* Ajuste o tamanho do ícone conforme necessário */
+    }
+  
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Adiciona uma sombra redonda no hover */
+    }
+}
+
+.customFormLabel {
+    display: block;
+    font-weight: bold;
+    color: #FFF;
+    font-size: 16px;
+    
+}
+
+.customFormControl {
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    
+}
+
+select.customFormControl {
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    appearance: none; /* Remove o estilo padrão */
+    -webkit-appearance: none; /* Para navegadores WebKit */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3E%3C/svg%3E"); /* Seta branca personalizada */
+    background-repeat: no-repeat;
+    background-position: calc(100% - 0.6rem) center; /* Move a seta mais para a direita */
+    background-size: 1.2rem; /* Define o tamanho da seta */
+}
+
+.customBtnPrimary {
+    background-color: green;
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.customBtnSecondary {
+    background-color: #21262c;
+    border: 1px solid #21262c;
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.customFormControl {
+    background-color: #2d2d2d;
+    color:var(--white);
+    border: 1px solid #3d3d3d;
+    height: 34px;
+    font-size: 16px;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end; /* Alinha os botões à direita */
+  margin-top: 10px; /* Adiciona um espaço acima dos botões */
+
+  button {
+    margin-left: 10px; /* Adiciona espaço entre os botões */
+  }
+}
+
+.customFormControl::-webkit-calendar-picker-indicator {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%);
+    cursor: pointer;
+}
+
+//SPINNER
+.loadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh; // Tamanho do spinner para centralizá-lo verticalmente
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--red-900);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+  
