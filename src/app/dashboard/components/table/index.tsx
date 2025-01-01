@@ -225,6 +225,7 @@ export function Table ({ clients, loading }: TableClientsProps) {
   };
   
   return (
+    
     <div className={styles.tableWrapper}>
       {loading ? (
         <div className={styles.loadingSpinner}>
