@@ -54,14 +54,14 @@ export function Table ({ clients, loading }: TableClientsProps) {
   const [isEdit, setIsEdit] = useState(false); // Novo estado para controlar se é edição
   const [selectedCompra, setSelectedCompra] = useState<Compra | null>(null);
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const querySearchTerm = searchParams.get('search');
-    if (querySearchTerm) {
-      setSearchTerm(querySearchTerm); // Atualiza o estado se houver um parâmetro de URL
-    }
-  }, [searchParams]);
+  // useEffect(() => {
+  //   const querySearchTerm = searchParams.get('search');
+  //   if (querySearchTerm) {
+  //     setSearchTerm(querySearchTerm); // Atualiza o estado se houver um parâmetro de URL
+  //   }
+  // }, [searchParams]);
 
   // Atualiza a URL sempre que searchTerm mudar
   useEffect(() => {

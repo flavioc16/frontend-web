@@ -70,14 +70,14 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [selectedPurchaseId, setSelectedPurchaseId] = useState<string>("");
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   
-  useEffect(() => {
-    const querySearchTerm = searchParams.get('search');
-    if (querySearchTerm) {
-      setSearchTerm(querySearchTerm); // Atualiza o estado se houver um parâmetro de URL
-    }
-  }, [searchParams]);
+  // useEffect(() => {
+  //   const querySearchTerm = searchParams.get('search');
+  //   if (querySearchTerm) {
+  //     setSearchTerm(querySearchTerm); // Atualiza o estado se houver um parâmetro de URL
+  //   }
+  // }, [searchParams]);
 
   // Atualiza a URL sempre que searchTerm mudar
   useEffect(() => {
