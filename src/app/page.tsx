@@ -149,10 +149,6 @@ export default function Login() {
               {isLoading ? <BeatLoader color="#fff" size={6} /> : 'Entrar'}
             </button>
           </form>
-
-          <Link href="/signup" className={styles.text}>
-            Não sabe a senha? fale conosco
-          </Link>
         </section>
       </div>
 
