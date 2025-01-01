@@ -51,7 +51,7 @@ export interface RelatorioComprasResponse {
 
 export default function Relatorios() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  //const searchParams = useSearchParams();
 
   const [compras, setCompras] = useState<Compra[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,29 +62,24 @@ export default function Relatorios() {
   useEffect(() => {
     const hoje = new Date();
     const dataAtualFormatada = hoje.toISOString().split("T")[0];
+  
+    // Atualiza os estados apenas se estiverem vazios
+    setDataInicio((prev) => prev || dataAtualFormatada);
+    setDataFim((prev) => prev || dataAtualFormatada);
+  
+    // Chama o fetch ao configurar os valores iniciais
+    fetchRelatorios(dataAtualFormatada, dataAtualFormatada);
+  }, []);
+  
+  
+  
+  // Esse useEffect deve ser disparado apenas se searchParams mudar
 
-    const queryDataInicio = searchParams.get("dataInicio");
-    const queryDataFim = searchParams.get("dataFim");
-
-    // Usar as datas da URL ou a data atual como padrão
-    const inicio = queryDataInicio || dataAtualFormatada;
-    const fim = queryDataFim || dataAtualFormatada;
-
-    // Atualiza o estado das datas
-    setDataInicio(inicio);
-    setDataFim(fim);
-
-    // Verifica se as datas na URL são diferentes das datas do estado
-    if (inicio !== dataInicio || fim !== dataFim) {
-      fetchRelatorios(inicio, fim, false); // Não atualiza a URL ao carregar pela primeira vez
-    }
-  }, [searchParams]); // Esse useEffect deve ser disparado apenas se searchParams mudar
-
-  async function fetchRelatorios(dataInicio: string, dataFim: string, shouldUpdateUrl = true) {
+  async function fetchRelatorios(dataInicio: string, dataFim: string) {
     setLoading(true);
     try {
       const token = getCookie("token");
-
+  
       const response = await api.get<RelatorioComprasResponse>("/relatorio/compras", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -94,20 +89,17 @@ export default function Relatorios() {
           dataFim,
         },
       });
-
+  
       setCompras(response.data.compras);
       setSomaTotalCompras(response.data.somaTotalCompras);
-
-      if (shouldUpdateUrl) {
-        // Atualiza a URL apenas se necessário
-        router.push(`/dashboard/reports?dataInicio=${dataInicio}&dataFim=${dataFim}`);
-      }
+  
     } catch (error) {
       console.error("Erro ao buscar relatório:", error);
     } finally {
       setLoading(false);
     }
   }
+  
 
   return (
     <main className={styles.contentArea}>
