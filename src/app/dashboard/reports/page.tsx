@@ -70,10 +70,6 @@ export default function Relatorios() {
     // Chama o fetch ao configurar os valores iniciais
     fetchRelatorios(dataAtualFormatada, dataAtualFormatada);
   }, []);
-  
-  
-  
-  // Esse useEffect deve ser disparado apenas se searchParams mudar
 
   async function fetchRelatorios(dataInicio: string, dataFim: string) {
     setLoading(true);
