@@ -461,6 +461,7 @@
 
 .customBtnPrimary {
   background-color: green;
+  min-width: 100px; /* Define uma largura mínima para o botão */
   border: none;
   color: #FFF;
   padding: 8.5px 20px; /* Ajuste o padding conforme necessário */
@@ -477,6 +478,10 @@
     outline: none;
     box-shadow: none;
   }
+  &:disabled {
+    cursor: wait; /* Cursor de espera durante o loading */
+   
+}
 }
 
 .customBtnSecondary {

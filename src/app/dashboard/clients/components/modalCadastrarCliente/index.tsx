@@ -6,6 +6,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 import styles from "./styles.module.scss";
 import { api } from "@/services/api";
+import { BeatLoader } from "react-spinners";
 
 interface CustomModalProps {
     show: boolean;
@@ -44,7 +45,7 @@ export default function ModalCadastrarCliente({
 }: CustomModalProps) {
     const [formData, setFormData] = useState(initialFormData);
     const [showPassword, setShowPassword] = useState(false);
-
+    const [isLoading, setIsLoading] = useState(false);
     const passwordInputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
@@ -78,7 +79,7 @@ export default function ModalCadastrarCliente({
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        
+        setIsLoading(true); // Ativa o estado de loading
         toast.dismiss(); // Remove qualquer toast pendente
     
         try {
@@ -128,12 +129,11 @@ export default function ModalCadastrarCliente({
             } else {
                 toast.error("Erro desconhecido.");
             }
+        }finally{
+            setIsLoading(false);
         }
     };
     
-    
-    
-
     const toggleShowPassword = () => {
         // Alternar o estado da visibilidade da senha
         const newState = !showPassword;
@@ -273,8 +273,12 @@ export default function ModalCadastrarCliente({
                         </div>
                     </div>
                     <div className={styles.buttonContainer}>
-                        <button type="submit" className={styles.customBtnPrimary}>
-                            {isEdit ? "Salvar" : "Cadastrar"}
+                        <button 
+                            type="submit" 
+                            className={styles.customBtnPrimary} 
+                            disabled={isLoading}
+                        >
+                            {isLoading ? <BeatLoader color="#fff" size={6} /> : isEdit ? "Editar" : "Cadastrar"}
                         </button>
                         <button type="button" onClick={onClose} className={styles.customBtnSecondary}>
                             Cancelar

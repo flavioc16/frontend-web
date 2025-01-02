@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X, ChevronLeft, ChevronRight, Plus, UserPen, Trash, FilePenLine } from 'lucide-react';
+import { Search, X, ChevronLeft, ChevronRight, Plus, Trash, FilePenLine } from 'lucide-react';
 import styles from './styles.module.scss';
-import stylesModal from './stylesModal.module.scss'
 import { useFocus } from '@/app/context/FocusContext';
 import ButtonAdd from '@/app/dashboard/components/buttonAdd';
 import { api } from '@/services/api';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Modal, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Modal, Tooltip, OverlayTrigger} from 'react-bootstrap';
 import { getCookie } from 'cookies-next';
 import DeleteModal from '@/app/dashboard/components/modalDelete';
+import { BeatLoader } from 'react-spinners';
 
 export interface Produto {
   id: string;
@@ -38,7 +38,6 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
   const [showModal, setShowModal] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
 
-
   const [nome, setNome] = useState<string>('');
   const [descricao, setDescricao] = useState<string>('');
   const [precoAVista, setPrecoAVista] = useState<number>(0);
@@ -54,7 +53,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
   const precoAVistaProdutoRef = useRef<HTMLInputElement | null>(null);
   const precoAPrazoProdutoRef = useRef<HTMLInputElement | null>(null);
 
-  
+  const [isLoading, setIsLoading] = useState(false);
   const [id, setProdutoId] = useState<string | null>(null);
 
   
@@ -162,7 +161,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
+    setIsLoading(true);
     toast.dismiss();
   
     try {
@@ -202,8 +201,6 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
         precoAPrazo,
         id: isEdit ? id : undefined, // Inclui o ID apenas no modo edição
       };
-  
-      console.log(productData);
   
       if (isEdit) {
         if (!id) {
@@ -255,6 +252,8 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
         toast.error("Erro desconhecido.");
         console.error("Erro desconhecido:", error);
       }
+    }finally{
+      setIsLoading(false);
     }
   };
   
@@ -301,7 +300,6 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
-
 
   useEffect(() => {
     setCurrentPage(1); // Reseta para a primeira página quando o termo de busca muda
@@ -562,6 +560,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
               <ChevronRight />
             </button>
           </div>
+          
           <Modal
             show={showModal}
             onHide={handleCloseModal}
@@ -646,8 +645,11 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
                     )}
                   </div>
                   <div className={styles.buttonGroup}>
-                    <button type="submit" className={styles.customBtnPrimary}>
-                      {isEdit ? 'Salvar' : 'Cadastrar'}
+                    <button 
+                      type="submit" 
+                      className={styles.customBtnPrimary}
+                    >
+                    {isLoading ? <BeatLoader color="#fff" size={6} /> : isEdit ? "Editar" : "Cadastrar"}
                     </button>
                     <button type="button" onClick={handleCloseModal} className={styles.customBtnSecondary}>
                       Cancelar
@@ -658,6 +660,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
               </form>
             </div>
           </Modal>
+
           <DeleteModal
             showModalDelete={showModalDelete}
             handleCloseModalDelete={handleCloseModalDelete}

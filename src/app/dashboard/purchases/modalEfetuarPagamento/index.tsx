@@ -5,6 +5,7 @@ import { getCookie } from "cookies-next";
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
 import styles from "./styles.module.scss";
+import { BeatLoader } from "react-spinners";
 
 interface PaymentModalProps {
   showModalPayment: boolean;
@@ -25,6 +26,7 @@ export default function PaymentModal({
   const [valueInputForPayment, setValueInputForPayment] = useState("0,00"); // Valor formatado
   const [rawValue, setRawValue] = useState(0); // Valor bruto
   const [initialPaymentValue, setInitialPaymentValue] = useState(0); // Valor bruto
+  const [isLoading, setIsLoading] = useState(false);
 
   // Formatação para o formato pt-BR
   const formatToCurrency = (value: number) => {
@@ -87,6 +89,7 @@ export default function PaymentModal({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     toast.dismiss();
+    setIsLoading(true);
 
     const paymentValue = parseFloat(valueInputForPayment.replace(/\./g, "").replace(",", "."));
 
@@ -148,6 +151,8 @@ export default function PaymentModal({
     } catch (error) {
       console.error(error);
       toast.error("Erro ao registrar o pagamento.");
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -187,8 +192,12 @@ export default function PaymentModal({
             </div>
             <div className={styles.buttonContainer}>
               <div className={styles.buttonGroup}>
-                <button type="submit" className={styles.customBtnPrimary}>
-                  Efetuar
+                <button
+                  type="submit"
+                  className={styles.customBtnPrimary}
+                  disabled={isLoading}
+                 >
+                  {isLoading ? <BeatLoader color="#fff" size={6} /> : 'Efetuar'}
                 </button>
                 <button
                   type="button"

@@ -429,15 +429,6 @@
 }
   
 
-.customBtnPrimary {
-  background-color: #007bff;
-  border: none;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
-} 
-
 .customBtnSecondary {
   background-color: #6c757d;
   border: none;
@@ -564,6 +555,7 @@ textarea.customFormControl {
 
 .customBtnPrimary {
   background-color: green;
+  min-width: 100px; /* Define uma largura mínima para o botão */
   border: none;
   color: #FFF;
   padding: 8.5px 20px; /* Ajuste o padding conforme necessário */

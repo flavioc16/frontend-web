@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Modal, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
 import { getCookie } from 'cookies-next';
 import DeleteModal from '@/app/dashboard/components/modalDelete';
+import { BeatLoader } from 'react-spinners';
 
 
 export interface User {
@@ -50,7 +51,7 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
   const inputRef = useRef<HTMLInputElement>(null);
   const { isMenuInputFocused, setIsMenuInputFocused } = useFocus();
 
-
+  const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [nome, setNome] = useState<string | undefined>();
@@ -133,7 +134,7 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    
+    setIsLoading(true); // Ativa o estado de loading
     toast.dismiss(); // Descartar qualquer notificação anterior
   
     try {
@@ -221,6 +222,8 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
         toast.error("Erro desconhecido.");
         console.error("Erro desconhecido:", error);
       }
+    }finally{
+      setIsLoading(false); // desativa o estado de loading
     }
   };
   
@@ -675,8 +678,12 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
                   </div>
                 </div>
                 <div className={styles.buttonContainer}>
-                  <button type="submit" className={styles.customBtnPrimary}>
-                    {isEdit ? 'Salvar' : 'Cadastrar'}
+                  <button 
+                    type="submit" 
+                    className={styles.customBtnPrimary} 
+                    disabled={isLoading}
+                    >
+                    {isLoading ? <BeatLoader color="#fff" size={6} /> : isEdit ? "Editar" : "Cadastrar"}
                   </button>
                   <button type="button" onClick={handleCloseModal} className={styles.customBtnSecondary}>
                     Cancelar

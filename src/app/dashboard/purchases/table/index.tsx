@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { Search, X, ChevronLeft, ChevronRight, Info, FilePenLine, Trash, Plus,  DollarSign } from 'lucide-react';
 import styles from './styles.module.scss';
 import stylesModal from './stylesModal.module.scss';
-
+import { useMenu } from "../../../context/MenuContext"; // Ajuste o caminho se necessário
 import Link from 'next/link';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import ButtonAdd from '@/app/dashboard/components/buttonAdd';
@@ -66,7 +66,7 @@ export function TableCompras({ compras, somaTotalCompras, loading, cliente, upda
   const [isEdit, setIsEdit] = useState(false); // Novo estado para controlar se é edição
   const [id, setCompraId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const { setSelected } = useMenu(); // Hook para manipular o contexto do menu
   const [dataDaCompra, setDataDaCompra] = useState('');
   const [created_at, setCreatedAt] = useState('');
   const [descricaoCompra, setDescricaoCompra] = useState<string | undefined>();
@@ -84,6 +84,11 @@ export function TableCompras({ compras, somaTotalCompras, loading, cliente, upda
   const openModalWithPurchaseInfo = (purchaseId: string) => {
     setSelectedPurchaseId(purchaseId);
     setShowModalInfo(true);
+  };
+
+  const handleCancel = () => {
+    setSelected("/"); // Atualiza o contexto para o item de menu "clients"
+   
   };
 
   // Função para fechar o modal
@@ -506,7 +511,10 @@ export function TableCompras({ compras, somaTotalCompras, loading, cliente, upda
           <div className={styles.container}>
             <div className={styles.buttonsContainer}>
               <Link href="/dashboard">
-                <button className={stylesModal.customBtnSecondary}>
+                <button 
+                  className={stylesModal.customBtnSecondary}
+                  onClick={handleCancel}
+                  >
                   Cancelar
                 </button>
               </Link>

@@ -8,9 +8,14 @@ import FeaturedCard from "./components/featuredCard";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+
+
+import { Product } from "./products/page";
+
 import styles from "./page.module.scss";
 
 import ModalCadastrarCliente from "./clients/components/modalCadastrarCliente";
+import ModalCadastrarProduto from "./products/components/modalCadastrarProduto";
 
 import { ShoppingCart, DollarSign, UserPlus, ScanBarcode } from "lucide-react";
 
@@ -30,12 +35,19 @@ export interface Client {
 export default function Dashboard() {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showModalCadastrarCliente, setShowModalCadastrarCliente] = useState(false);
   const [showModalCadastrarProduto, setShowModalCadastrarProduto] = useState(false);
 
   const [countClients, setCountClients] = useState<number | undefined>(undefined);
   const [countProducts, setCountProducts] = useState<number | undefined>(undefined);
   const [dailyPurchaseCount, setDailyPurchaseCount] = useState<number | undefined>(undefined);
   const [dailyPaymentCount, setDailyPaymentCount] = useState<number | undefined>(undefined);
+
+  const [nomeProduto, setNomeProduto] = useState("");
+  const [descricaoProduto, setDescricaoProduto] = useState("");
+  const [precoAVista, setPrecoAVista] = useState(0);
+  const [precoAPrazo, setPrecoAPrazo] = useState(0);
+  const [produtoId, setProdutoId] = useState(""); // ID vazio para novo produto
 
   const [loadingDailyPurchaseCount, setLoadingDailyPurchaseCount] = useState(true);
   const [loadingDailyPaymentsCount, setLoadingDailyPaymentsCount] = useState(true);
@@ -51,35 +63,47 @@ export default function Dashboard() {
     id: "", // ID é vazio para novos clientes
   });
 
-  // Função para abrir o modal de edição
-  const handleOpenModalCadastrarCliente = (cliente: Client | null) => {
-    if (cliente) {
-      // Caso haja um cliente, preenche os dados para edição
-      setFormData({
-        nome: cliente.nome,
-        referencia: cliente.referencia || "",
-        endereco: cliente.endereco || "",
-        email: cliente.email || "",
-        telefone: cliente.telefone || "",
-        username: cliente.username || "",
-        password: "", // Não carrega a senha por segurança
-        id: cliente.id,
-      });
-    } else {
-      // Caso contrário, prepara um objeto vazio para criar um novo cliente
-      setFormData({
-        nome: "",
-        referencia: "",
-        endereco: "",
-        email: "",
-        telefone: "",
-        username: "",
-        password: "",
-        id: "", // ID vazio para novo cliente
-      });
-    }
-    setShowModalCadastrarProduto(true);
+  const [formDataProduct, setFormDataProduct] = useState({
+    nome: "",
+    descricao: "",
+    precoAVista: "0,00",
+    precoAPrazo: "0,00",
+  });
+
+
+  // Função para abrir o modal de cadastro de cliente
+  const handleOpenModalCadastrarCliente = () => {
+    // Reseta os dados do formulário para um novo cliente
+    setFormData({
+      nome: "",
+      referencia: "",
+      endereco: "",
+      email: "",
+      telefone: "",
+      username: "",
+      password: "",
+      id: "", // ID vazio para novo cliente
+    });
+
+    setShowModalCadastrarCliente(true); // Abre o modal
   };
+
+
+  const handleOpenModalCadastrarProduto = () => {
+    // Reseta os dados do formulário para um novo cadastro
+    setFormDataProduct({
+      nome: "",
+      descricao: "",
+      precoAVista: "0,00",
+      precoAPrazo: "0,00",
+
+    });
+  
+    setShowModalCadastrarProduto(true); // Abre o modal
+  };
+  
+  
+
 
   // Função para buscar a lista de clientes
   const fetchClients = async () => {
@@ -206,7 +230,7 @@ export default function Dashboard() {
         <Col md={3} className="px-0" style={{ marginRight: '-22px', marginTop: '2rem' }}>
           <FeaturedCard 
             title="Cadastrar clientes"
-            onClick={() => handleOpenModalCadastrarCliente(null)}
+            onClick={() => handleOpenModalCadastrarCliente()}
             count={countClients}  
             icon={<UserPlus size={40} />}
             isLoading={loading} 
@@ -218,15 +242,26 @@ export default function Dashboard() {
             count={countProducts}   
             icon={<ScanBarcode size={40} />}
             isLoading={loading} 
+            onClick={() => handleOpenModalCadastrarProduto()} // Abre o modal para cadastro de novo produto
           />
         </Col>
+
       </Row>
 
       <Table clients={clients} loading={loading} />
 
-      <ModalCadastrarCliente
+      <ModalCadastrarProduto
         show={showModalCadastrarProduto}
         onClose={() => setShowModalCadastrarProduto(false)}
+        isEdit={false}
+        initialFormData={formDataProduct}
+        updateProdutos={updateFetch}
+      
+      />
+
+      <ModalCadastrarCliente
+        show={showModalCadastrarCliente}
+        onClose={() => setShowModalCadastrarCliente(false)}
         isEdit={!!formData.id} // Se id estiver presente, é edição
         initialFormData={formData} // Passa os dados do cliente para o modal
         updateClientes={updateFetch} // Passa a função updateFetch como updateClientes

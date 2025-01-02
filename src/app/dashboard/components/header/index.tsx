@@ -11,18 +11,22 @@ import Modal from "react-bootstrap/Modal";
 import stylesModal from "./stylesModal.module.scss";
 import useF2Redirect from "@/app/hooks/useF2Redirect"; // Importando o hook
 import { useMenu } from "@/app/context/MenuContext";
+import { BeatLoader } from "react-spinners";
 
 
 export function Header() {
   useF2Redirect(); // usando o hook para usar f2 inicio
   const { setSelected } = useMenu(); // Acessando o contexto do menu
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
   const handleLogout = () => {
+    setIsLoading(true); // Ativa o estado de loading
     deleteCookie("token", { path: "/" });
     localStorage.removeItem("selectedMenuItem");
+    setIsLoading(false); // Ativa o estado de loading
     router.replace("/");
   };
 
@@ -38,9 +42,6 @@ export function Header() {
     setSelected("/"); // Atualiza o contexto para o item "Início"
   };
 
-  const handleClientsClick = () => {
-    setSelected("clients"); // Atualiza o contexto para o item "Clientes"
-  };
 
   return (
     <>
@@ -58,9 +59,7 @@ export function Header() {
           </Link>
 
           <nav>
-            <Link href="/dashboard/clients" onClick={handleClientsClick}>
-              Clientes
-            </Link>
+            {/* colocar seccion ou div para exibir opções do usuário*/}
             <a onClick={handleOpenModal} className={styles.logoutLink}>
               <LogOutIcon size={22} color="#FFF" />
             </a>
@@ -82,8 +81,11 @@ export function Header() {
         </div>
         <div className={stylesModal.customModalBody}>
           <div className={stylesModal.buttonContainer}>
-            <button onClick={handleLogout} className={stylesModal.customBtnPrimary}>
-              Sair
+            <button 
+              onClick={handleLogout} 
+              className={stylesModal.customBtnPrimary}
+            >
+               {isLoading ? <BeatLoader color="#fff" size={6} /> : "Sair"}
             </button>
             <button onClick={handleCloseModal} className={stylesModal.customBtnSecondary}>
               Cancelar

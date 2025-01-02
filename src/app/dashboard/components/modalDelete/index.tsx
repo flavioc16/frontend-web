@@ -1,6 +1,8 @@
 import { Modal } from "react-bootstrap";
 import { X } from "lucide-react";
+import { BeatLoader } from "react-spinners"; // Exemplo de loader
 import stylesModal from "./stylesModal.module.scss";
+import { useState } from "react";
 
 interface DeleteModalProps {
   showModalDelete: boolean;
@@ -15,6 +17,13 @@ export default function DeleteModal({
   handleConfirmDelete,
   modalTitle, // Recebe a prop modalTitle
 }: DeleteModalProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setIsLoading(true); // Ativa o estado de loading
+    await handleConfirmDelete(); // Aguarda a ação de exclusão
+    setIsLoading(false); // Desativa o estado de loading
+  };
 
   return (
     <Modal
@@ -31,16 +40,18 @@ export default function DeleteModal({
       </div>
       <div className={stylesModal.customModalBody}>
         <div className={stylesModal.buttonContainer}>
-          <button 
-            onClick={handleConfirmDelete} 
-            className={stylesModal.customBtnPrimary} 
+          <button
+            onClick={handleDelete}
+            className={stylesModal.customBtnPrimary}
+            disabled={isLoading} // Desabilita o botão enquanto está carregando
             autoFocus
           >
-            Excluir
+            {isLoading ? <BeatLoader color="#fff" size={6} /> : "Excluir"}
           </button>
-          <button 
-            onClick={handleCloseModalDelete} 
+          <button
+            onClick={handleCloseModalDelete}
             className={stylesModal.customBtnSecondary}
+            disabled={isLoading} // Opcional: desabilita o botão de cancelar durante o loading
           >
             Cancelar
           </button>

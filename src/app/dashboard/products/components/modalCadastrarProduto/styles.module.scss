@@ -422,7 +422,31 @@ select.customFormControl {
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     cursor: pointer;
+
+    min-width: 100px; /* Define uma largura mínima para o botão */
+    
+    &:disabled {
+        cursor: wait; /* Cursor de espera durante o loading */
+       
+    }
 }
+
+textarea.customFormControl {
+    background-color: #2d2d2d;
+    color: var(--white);
+    border: 1px solid #3d3d3d;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: vertical; /* Permite redimensionamento apenas vertical */
+    
+    /* Altura baseada em 'rows' */
+    height: auto; /* Permite que o atributo 'rows' controle a altura */
+    min-height: calc(1.5em * 3); /* Altura mínima para 3 linhas */
+    max-height: 300px; /* Tamanho máximo, ajuste conforme necessário */
+  }
 
 .customBtnSecondary {
     background-color: #21262c;

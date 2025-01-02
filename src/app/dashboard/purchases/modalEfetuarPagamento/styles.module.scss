@@ -419,8 +419,9 @@ select.customFormControl {
     background-color: green;
     border: none;
     color: #fff;
-    padding: 0.5rem 1rem;
+    padding: 8.5px 20px; /* Ajuste o padding conforme necessário */
     border-radius: 0.25rem;
+    min-width: 100px; /* Define uma largura mínima para o botão */
     cursor: pointer;
 
     &:hover {

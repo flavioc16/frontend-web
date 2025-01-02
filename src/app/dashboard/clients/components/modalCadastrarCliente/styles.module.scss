@@ -429,6 +429,7 @@
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   cursor: pointer;
+  
 } 
 
 .customBtnSecondary {
@@ -479,6 +480,7 @@
   padding: 8.5px 20px; /* Ajuste o padding conforme necessário */
   border-radius: 4px;
   cursor: pointer;
+  min-width: 100px; /* Define uma largura mínima para o botão */
 
   &:hover {
     background-color: darkgreen;
@@ -489,6 +491,10 @@
     background-color: darkgreen;
     outline: none;
     box-shadow: none;
+  }
+  &:disabled {
+      cursor: wait; /* Cursor de espera durante o loading */
+     
   }
 }
 

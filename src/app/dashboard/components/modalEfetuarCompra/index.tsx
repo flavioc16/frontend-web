@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { X } from "lucide-react";
 import styles from "./styles.module.scss";
 import { Compra } from "../../purchases/table";
+import { BeatLoader } from "react-spinners";
 
 interface CreatePurchaseModalProps {
   show: boolean;
@@ -53,6 +54,7 @@ export default function CreatePurchaseModal({
 
   const [produtos, setProdutos] = useState<any[]>([]);
   const [filteredProdutos, setFilteredProdutos] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
  
   const fetchProdutos = async () => {
     try {
@@ -118,6 +120,7 @@ export default function CreatePurchaseModal({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
   
     toast.dismiss();
   
@@ -191,6 +194,8 @@ export default function CreatePurchaseModal({
     } catch (error) {
       console.error(error);
       toast.error(isEdit ? "Erro ao atualizar compra." : "Erro ao cadastrar compra.");
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -360,10 +365,14 @@ export default function CreatePurchaseModal({
               )}
               </div>
               <div className={styles.buttonGroup}>
-                <button type="submit" className={styles.customBtnPrimary}>
-                  {isEdit ? "Editar" : "Cadastrar"}
-                </button>
-                <button type="button" onClick={onClose} className={styles.customBtnSecondary}>
+              <button 
+                type="submit" 
+                className={styles.customBtnPrimary} 
+                disabled={isLoading}
+              >
+                {isLoading ? <BeatLoader color="#fff" size={6} /> : isEdit ? "Editar" : "Cadastrar"}
+              </button>
+                <button type="button" onClick={onClose} className={styles.customBtnSecondary} >
                   Cancelar
                 </button>
               </div>

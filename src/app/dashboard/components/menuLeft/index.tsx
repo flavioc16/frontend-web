@@ -13,7 +13,6 @@ const menuItems: { id: MenuItemId, label: string, icon: JSX.Element }[] = [
   { id: 'reminders', label: 'Lembretes', icon: <Bell /> },
   { id: 'reports', label: 'Relatórios', icon: <CalendarCheck /> },
   { id: 'payments', label: 'Pagamentos', icon: <HandCoins />},
-  { id: 'moneybox', label: 'Caixa', icon: <CircleDollarSign />},
 ];
 
 export default function MenuLeft() {
