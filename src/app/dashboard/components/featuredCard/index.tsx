@@ -52,7 +52,7 @@ export default function FeaturedCard({
           {/* Renderiza o valor em dinheiro, mascarado ou não, se fornecido */}
           {value && (
             <span className={styles.value}>
-              {isValueVisible ? value : "******"}
+              {isValueVisible ? value : "*******"}
             </span>
           )}
 

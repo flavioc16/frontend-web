@@ -580,6 +580,7 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
                     onChange={(e) => setNome(capitalizeWords(e.target.value))}
                     autoFocus
                     className={styles.customFormControl}
+                    maxLength={30}
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -592,6 +593,7 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
                     value={referencia}
                     onChange={(e) => setReferencia(capitalizeWords(e.target.value))}
                     className={styles.customFormControl}
+                    maxLength={30}
                   />
                 </div>
                 <div className={styles.formGroup}>

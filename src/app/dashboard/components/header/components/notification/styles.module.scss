@@ -1,0 +1,143 @@
+.notificationsContainer {
+  position: absolute;
+  top: 55px;  /* Ajuste a distância da parte superior da página */
+  right: 65px;
+  width: 330px;
+  max-height: 445px;  /* Define o tamanho máximo */
+  border-radius: 8px 8px 0 0;
+  z-index: 10;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  margin-top: 0; /* Remova qualquer espaço acima da caixa de notificações */
+  overflow-y: auto;  /* Exibe a barra de rolagem vertical se o conteúdo exceder o max-height */
+  box-sizing: border-box;  /* Inclui padding no cálculo de largura/altura */
+  background-color: #2e343b; /* Cor de fundo das notificações */
+}
+
+.notificationsHeader {
+  background-color: #1f242a;
+  color: #d8cbcb;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+  margin-bottom: 0;  /* Remover qualquer margem indesejada */
+}
+
+.notificationsHeader h6 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.notificationItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 0px;
+  background-color: #2e343b;  /* Fundo escuro para a notificação */
+  border-bottom: 1px solid var(--cinza-800);
+  text-decoration: none;
+  color: #fff;  /* Cor do texto branca para contraste */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 0; /* Remover o espaço acima de cada item */
+  position: relative; /* Adicionado para permitir o posicionamento absoluto da bolinha */
+}
+
+.notificationItem:hover {
+  background-color: #444d56;  /* Escurecer um pouco mais no hover */
+}
+
+.iconContainer {
+  margin-right: 15px;
+}
+
+.iconCircleBgInfo,
+.iconCircleBgPrimary,
+.iconCircleBgDanger {
+  width: 40px;
+  height: 40px;
+  background-color: #17a2b8; /* Info color */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconCircleBgPrimary {
+  background-color: #007bff; /* Primary color */
+}
+
+.iconCircleBgDanger {
+  background-color: #dc3545; /* Danger color */
+}
+
+.notificationText {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.notificationTitle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;  /* Cor do título branca */
+}
+
+.notificationDescription,
+.notificationDetails {
+  font-size: 12px;
+  color: #d1d1d1;  /* Cor mais clara para descrição e detalhes */
+}
+
+.notificationAmount {
+  font-weight: bold;
+  color: #dc3545; /* Cor vermelha para valores importantes */
+}
+
+.notificationDate {
+  font-size: 12px;
+  color: #b0b0b0;  /* Cor mais suave para a data */
+}
+
+.notificationItem:last-child {
+  border-bottom: none;
+}
+
+.unreadDot {
+  position: absolute;
+  top: 25px; /* Ajuste conforme necessário */
+  right: 15px; /* Ajuste conforme necessário */
+  width: 9px; /* Tamanho da bolinha */
+  height: 9px; /* Tamanho da bolinha */
+  background-color: #007bff; /* Cor azul */
+  border-radius: 50%; /* Forma circular */
+}
+
+/* Estilos para o loader e mensagens de "sem notificações" */
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #fff;
+}
+
+.emptyNotifications {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #ccc;
+  text-align: center;
+}
+
+.emptyNotifications p {
+  margin: 0;
+  font-style: italic;
+}

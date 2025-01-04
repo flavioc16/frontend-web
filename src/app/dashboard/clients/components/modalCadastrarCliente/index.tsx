@@ -170,6 +170,7 @@ export default function ModalCadastrarCliente({
                             onChange={(e) => handleChange("nome", e.target.value)}
                             autoFocus
                             className={styles.customFormControl}
+                            maxLength={30}
                         />
                     </div>
                     <div className={styles.formGroup}>
@@ -184,6 +185,7 @@ export default function ModalCadastrarCliente({
                             value={capitalizeWords(formData.referencia)}
                             onChange={(e) => handleChange("referencia", e.target.value)}
                             className={styles.customFormControl}
+                            maxLength={30}
                         />
                     </div>
                     <div className={styles.formGroup}>
