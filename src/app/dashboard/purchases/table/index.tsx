@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X, ChevronLeft, ChevronRight, Info, FilePenLine, Trash, Plus,  DollarSign } from 'lucide-react';
+import { Search, X, ChevronLeft, ChevronRight, Info, FilePenLine, Trash, Plus} from 'lucide-react';
 import styles from './styles.module.scss';
 import stylesModal from './stylesModal.module.scss';
 import { useMenu } from "../../../context/MenuContext"; // Ajuste o caminho se necessário

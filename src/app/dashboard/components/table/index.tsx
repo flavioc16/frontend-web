@@ -1,5 +1,5 @@
 "use client"; // Garantindo que o código seja executado no cliente 
-import { useState, useEffect, useMemo, Suspense } from 'react';
+import { useState, useEffect, useMemo, Suspense, useRef } from 'react';
 import { Search, X, ChevronLeft, ChevronRight, Plus, ShoppingBasket } from 'lucide-react';
 import styles from './styles.module.scss';
 import { useFocus } from '@/app/context/FocusContext';
@@ -53,6 +53,8 @@ export function Table ({ clients, loading }: TableClientsProps) {
   const [created_at, setCreatedAt] = useState('');
   const [isEdit, setIsEdit] = useState(false); // Novo estado para controlar se é edição
   const [selectedCompra, setSelectedCompra] = useState<Compra | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // const searchParams = useSearchParams();
 
@@ -237,25 +239,6 @@ export function Table ({ clients, loading }: TableClientsProps) {
           <div className={styles.header}>
             <h1>CLIENTES CADASTRADOS</h1>
             <div className={styles.headerControls}>
-              <div className={styles.resultsPerPage}>
-                <label htmlFor="resultsPerPage"> Exibir :</label>
-                <select
-                  id="resultsPerPage"
-                  value={clientsPerPage}
-                  onChange={handleClientsPerPageChange}
-                  onFocus={handleSelectFocus}
-                  onBlur={handleSelectBlur}
-                  className={styles.customSelect}
-                  aria-label="Número de clientes por página"
-                >
-                  <option value={10}>10</option>
-                  <option value={50}>50</option>
-                  <option value={100}>100</option>
-                </select>
-                <label htmlFor="resultsPerPage" className={styles.ppage}>
-                  por página
-                </label>
-              </div>
               <div className={styles.searchContainer}>
                 <input
                   type="text"
@@ -303,6 +286,8 @@ export function Table ({ clients, loading }: TableClientsProps) {
                       <OverlayTrigger
                         trigger={['hover', 'focus']}
                         placement="top"
+                        container={document.body} // Colocando diretamente no body
+                        flip={true}
                         overlay={
                           <Tooltip id={`tooltip-plus-${client.id}`} className={styles.customTooltip}>
                             Adicionar em {client.nome}
@@ -317,9 +302,13 @@ export function Table ({ clients, loading }: TableClientsProps) {
                         />
                       </OverlayTrigger>
 
+
+
                       <OverlayTrigger
                         trigger={['hover', 'focus']}
                         placement="top"
+                        container={() => document.body} // Força o Tooltip a ser renderizado fora do layout
+                        flip={true}
                         overlay={
                           <Tooltip id={`tooltip-info-${client.id}`} className={styles.customTooltip}>
                             Compras de {client.nome}

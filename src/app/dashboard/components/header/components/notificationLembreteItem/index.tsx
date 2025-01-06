@@ -1,45 +1,43 @@
 import Link from "next/link";
-import { TriangleAlert } from "lucide-react"; 
+import { Info } from "lucide-react";
 import styles from "./styles.module.scss";
 
-interface Notification {
+interface NotificationLembrete {
   id: string;
   title: string;
   details: string;
   dueDate: string; // Data no formato "YYYY-MM-DD"
-  status: number;
+  status: number;  // 0: Não lido, 1: Lido
   link: string;
 }
 
-interface NotificationJurosItemProps {
-  notification: Notification;
+interface NotificationLembreteItemProps {
+  notification: NotificationLembrete;
   onClick: (id: string) => void;
   icon?: React.ReactNode;
 }
 
-const NotificationJurosItem: React.FC<NotificationJurosItemProps> = ({ notification, onClick }) => {
+const NotificationLembreteItem: React.FC<NotificationLembreteItemProps> = ({ notification, onClick }) => {
   const { id, title, details, dueDate, status, link } = notification;
 
   return (
     <Link href={link} onClick={() => onClick(id)}>
       <div className={styles.notificationItem}>
         <div className={styles.iconContainer}>
-          <div className={styles.iconCircleBgDanger}>
-            <TriangleAlert 
-              size={24} 
+          <div className={styles.iconCircleBgInfo}>
+            <Info 
+              size={23} 
               color="#FFF" 
-              style={{ marginTop: '-4px' }} // Ajuste o valor conforme necessário
             />
           </div>
         </div>
         <div className={styles.notificationText}>
           <div className={styles.notificationTitle}>{title}</div>
           <div className={styles.notificationDetails}>
-            <span className={styles.notificationAmount}>{details}</span>
+            <span className={styles.notificationDescription}>{details}</span>
             <div className={styles.notificationDate}>
-              Data de vencimento: {dueDate} {/* Exibindo a data diretamente */}
             </div>
-            {status === 0 && <div className={styles.unreadDot}></div>}
+            {status === 0 && <div className={styles.unreadDot}></div>} {/* Exibe um ponto para notificações não lidas */}
           </div>
         </div>
       </div>
@@ -47,4 +45,4 @@ const NotificationJurosItem: React.FC<NotificationJurosItemProps> = ({ notificat
   );
 };
 
-export default NotificationJurosItem;
+export default NotificationLembreteItem;

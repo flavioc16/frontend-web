@@ -1,7 +1,45 @@
-.contentArea {
-  width: 100%;
-  margin-top: 1rem;
-  margin-left: 0.4rem;
-  margin-bottom: 3rem;
-  overflow-x: hidden; /* Remove a barra de rolagem horizontal */
+.contenteArea{
+  margin-left: 0.5rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - var(--header-height, 80px)); /* Altura dinâmica baseada na altura da viewport menos o Header */
+  overflow: hidden; /* Impede o estouro que causa a barra de rolagem */
+}
+
+.dividerLeft {
+  width: var(--border-width, 1px); /* Espessura ajustável */
+  background-color: var(--cinza-800, #ccc); /* Cor ajustável */
+  margin-top: 15px;
+  margin-left: 0.3px;
+  position: relative; /* Necessário para o uso de ::before */
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%; /* Mesma largura da divisória */
+    height: 10px; /* Altura ajustável */
+    bottom: 0; /* Alinha ao final da divisória sem ultrapassar */
+    left: 0;
+    background-color: var(--cinza-800, #ccc); /* Mesma cor da divisória */
+  }
+}
+
+.divider {
+  width: var(--border-width, 1px); /* Espessura ajustável */
+  background-color: var(--cinza-800, #ccc); /* Cor ajustável */
+  margin-top: 15px;
+  position: relative; /* Necessário para o uso de ::before */
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%; /* Mesma largura da divisória */
+    height: 15px; /* Altura ajustável */
+    bottom: 0; /* Alinha ao final da divisória sem ultrapassar */
+    left: 0;
+    background-color: var(--cinza-800, #ccc); /* Mesma cor da divisória */
+  }
 }

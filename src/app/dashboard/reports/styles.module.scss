@@ -29,12 +29,7 @@
           margin-bottom: 1px; /* Ajuste a margem inferior para mover o label mais para baixo */
       }
 
-    input {
-        padding: 6px; /* Aumentei o padding */
-        font-size: 16px; /* Aumentei o tamanho da fonte */
-        width: 100%; /* Aumentei a largura para preencher o container */
-        max-width: 200vh; /* Limitei a largura para não ficar muito largo */
-      }
+   
   }
 
   .dateInputs input[type="date"] {
@@ -44,8 +39,6 @@
     
       padding: 6px; /* Ajusta o padding */
       font-size: 16px; /* Ajusta o tamanho da fonte */
-      width: 100%; /* Preenche toda a largura */
-      max-width: 200vh; /* Limita a largura */
       border: 1px solid var(--cinza-800); /* Define a borda */
       border-radius: 4px; /* Bordas arredondadas */
       background-color: var(--roxo-700); /* Cor de fundo */

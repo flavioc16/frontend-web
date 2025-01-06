@@ -1,13 +1,12 @@
 .menu {
-  width: 350px;
+  width: 280px;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  margin: 0;
+  height: calc(100vh - var(--header-height, 100px));
+  margin-right: 2px;
   background-color: var(--white);
   margin-top: 16px;
   position: relative;
-  border-right: var(--border-width) solid var(--cinza-800);
   overflow: hidden;
   font-family: 'Montserrat', sans-serif;
 
@@ -16,7 +15,6 @@
     position: absolute;
     top: 0;
     right: -var(--border-width);
-    width: var(--border-width);
     height: 100%;
     background-color: var(--cinza-800);
   }
@@ -159,3 +157,4 @@
     right: 8px;
   }
 }
+

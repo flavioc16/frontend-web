@@ -5,7 +5,6 @@ import { api } from '@/services/api';
 import styles from './page.module.scss';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BeatLoader } from 'react-spinners';

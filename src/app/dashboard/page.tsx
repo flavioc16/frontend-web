@@ -18,6 +18,7 @@ import ModalCadastrarCliente from "./clients/components/modalCadastrarCliente";
 import ModalCadastrarProduto from "./products/components/modalCadastrarProduto";
 
 import { ShoppingCart, DollarSign, UserPlus, ScanBarcode } from "lucide-react";
+import { TableClients } from "./clients/components/tableClient";
 
 export interface Client {
   id: string;
@@ -201,52 +202,53 @@ export default function Dashboard() {
 
   return (
     <main className={styles.contentArea}>
-      <Row className={`${styles.rowCustom} g-4`}>
-        <Col md={3} className="px-10" style={{ marginRight: '3px', marginLeft: '3px', marginTop: '2rem' }}>
-        <FeaturedCard 
-          title="Caixa atual (compras)" 
-          value={dailyPurchaseCount !== undefined 
-            ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dailyPurchaseCount) 
-            : "..."
-          } 
-          updateValueCompras={updateValueCompras}
-          showEyeIcon={true} 
-          icon={<ShoppingCart size={40} />}
-          isLoading={loading} 
-        />
-        </Col>
-        <Col md={3} className="px-0" style={{ marginRight: '-9px', marginTop: '2rem' }}>
-          <FeaturedCard 
-            title="Por conta (pagamentos)"
-            showEyeIcon={true}
-            value={dailyPaymentCount !== undefined 
-              ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dailyPaymentCount) 
-              : "..."
-            } 
-            icon={<DollarSign size={40} />} 
-            isLoading={loading}
-          />
-        </Col>
-        <Col md={3} className="px-0" style={{ marginRight: '-22px', marginTop: '2rem' }}>
-          <FeaturedCard 
-            title="Cadastrar clientes"
-            onClick={() => handleOpenModalCadastrarCliente()}
-            count={countClients}  
-            icon={<UserPlus size={40} />}
-            isLoading={loading} 
-          />
-        </Col>
-        <Col md={3} className="px-10" style={{ marginRight: '-1px', marginTop: '2rem' }}>
-          <FeaturedCard 
-            title="Cadastrar produtos"
-            count={countProducts}   
-            icon={<ScanBarcode size={40} />}
-            isLoading={loading} 
-            onClick={() => handleOpenModalCadastrarProduto()} // Abre o modal para cadastro de novo produto
-          />
-        </Col>
+      <div className="container-fluid">
+        <div className="row mt-2">
+          <div className="col-xl-3 col-md-6 mb-4 mt-4">
+            <FeaturedCard 
+              title="Caixa atual (compras)" 
+              value={dailyPurchaseCount !== undefined 
+                ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dailyPurchaseCount) 
+                : "..." }
+              updateValueCompras={updateValueCompras}
+              showEyeIcon={true} 
+              icon={<ShoppingCart size={40} />}
+              isLoading={loading} 
+            />
+          </div>
+          <div className="col-xl-3 col-md-6 mb-4 mt-4">
+            <FeaturedCard 
+              title="Por conta (pagamentos)"
+              showEyeIcon={true}
+              value={dailyPaymentCount !== undefined 
+                ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dailyPaymentCount) 
+                : "..." }
+              icon={<DollarSign size={40} />} 
+              isLoading={loading}
+            />
+          </div>
+          <div className="col-xl-3 col-md-6 mb-4 mt-4">
+            <FeaturedCard 
+              title="Cadastrar clientes"
+              onClick={() => handleOpenModalCadastrarCliente()}
+              count={countClients}  
+              icon={<UserPlus size={40} />}
+              isLoading={loading} 
+            />
+          </div>
+          <div className="col-xl-3 col-md-6 mb-4 mt-4 ml-4">
+            <FeaturedCard 
+              title="Cadastrar produtos"
+              count={countProducts}   
+              icon={<ScanBarcode size={40} />}
+              isLoading={loading} 
+              onClick={() => handleOpenModalCadastrarProduto()}
+            />
+          </div>
+          
+        </div>
+      </div>
 
-      </Row>
 
       <Table clients={clients} loading={loading} />
 

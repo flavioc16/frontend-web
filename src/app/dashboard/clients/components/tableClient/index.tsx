@@ -78,6 +78,23 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
       }, 0);
     }
   };
+
+  useEffect(() => {
+    const currentParams = new URLSearchParams(window.location.search);
+    
+    if (searchTerm) {
+      currentParams.set('search', searchTerm); // Define ou atualiza o parâmetro de busca
+    } else {
+      currentParams.delete('search'); // Se não houver valor, remove o parâmetro de busca
+    }
+
+    // Atualiza a URL com os parâmetros atuais (mantendo dataInicio e dataFim)
+    window.history.pushState(
+      {},
+      '',
+      `${window.location.pathname}?${currentParams.toString()}`
+    );
+  }, [searchTerm]);
   
   const [clientName, setClientName] = useState('');
   const [id, setClientId] = useState<string | null>(null);

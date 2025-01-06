@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import styles from "./styles.module.scss";
 import Image from "next/image";
@@ -23,9 +23,12 @@ export function Header() {
   const { setSelected } = useMenu(); // Acessando o contexto do menu
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [notificationCount, setNotificationCount] = useState<number>(0);
+  const [lembretesCount, setLembreteCount] = useState<number>(0);
   const [showNotifications, setShowNotifications] = useState<boolean>(false); // Controla se as notificações serão mostradas
   const [showModal, setShowModal] = useState<boolean>(false); // Controla se o modal de logout será mostrado
-  const [notifications, setNotifications] = useState<any[]>([]); // Lista de notificações
+
+  const [notificationsJuros, setNotificationsJuros] = useState<any[]>([]); // Lista de notificações
+  const [notificationsLembrete, setNotificationsLembrete] = useState<any[]>([]);
   const router = useRouter();
 
   // Função para logout com loading
@@ -39,13 +42,14 @@ export function Header() {
   };
 
   // Função para abrir/fechar notificações e carregar se necessário
-  const handleOpenNotifications = () => {
+  const handleOpenNotifications = async () => {
     setShowNotifications((prevState) => !prevState); // Alterna a visibilidade das notificações
     if (!showNotifications) {
-      fetchNotificationsJurosItem(); // Carrega as notificações ao abrir
+      await fetchNotificationsJurosItem(); // Carrega as notificações de juros ao abrir
+      await fetchNotificationsLembreteItem(); // Carrega os lembretes ao abrir
     }
   };
-
+  
   const handleCloseModal = () => {
     setShowModal(false); // Fecha o modal de logout
   };
@@ -55,14 +59,12 @@ export function Header() {
   };
 
   // Função para buscar o contador de notificações
-  const fetchNotificationCount = async () => {
-    setIsLoading(true); // Ativa o loading ao buscar as notificações
+  const fetchJurosClientesCount = useCallback(async () => {
     try {
-      const token = getCookie('token'); // Obtém o token de autenticação
+      const token = getCookie("token"); // Obtém o token de autenticação
   
       if (!token) {
-        toast.error('Token de autenticação não encontrado. Faça login novamente.');
-        setIsLoading(false); // Desativa o loading se não houver token
+        console.log("Token de autenticação não encontrado. Faça login novamente.");
         return;
       }
   
@@ -73,19 +75,45 @@ export function Header() {
       });
   
       setNotificationCount(response.data.count); // Atualiza o contador de notificações
-      setIsLoading(false); // Desativa o loading após a resposta
     } catch (error) {
-      setIsLoading(false); // Desativa o loading em caso de erro
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.error || "Erro ao buscar o contador de notificações.";
-        toast.error(errorMessage);
+        console.log(errorMessage);
         console.error("Erro ao buscar notificações:", error.response?.data);
       } else {
         toast.error("Erro desconhecido.");
         console.error("Erro desconhecido:", error);
       }
     }
-  };
+  }, []);
+
+  const fetchLembretesCount = useCallback(async () => {
+    try {
+      const token = getCookie("token"); // Obtém o token de autenticação
+  
+      if (!token) {
+        console.log("Token de autenticação não encontrado. Faça login novamente.");
+        return;
+      }
+  
+      const response = await api.get("/lembretes/count", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
+        },
+      });
+  
+      setLembreteCount(response.data.count); // Atualiza o contador de lembretes
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.error || "Erro ao buscar o contador de lembretes.";
+        console.log(errorMessage);
+        console.error("Erro ao buscar lembretes:", error.response?.data);
+      } else {
+        toast.error("Erro desconhecido.");
+        console.error("Erro desconhecido:", error);
+      }
+    }
+  }, []); // useCallback mantém a referência da função
 
   // Função para buscar as notificações
   const fetchNotificationsJurosItem = async () => {
@@ -105,7 +133,7 @@ export function Header() {
         },
       });
   
-      setNotifications(response.data); // Atualiza as notificações
+      setNotificationsJuros(response.data); // Atualiza as notificações
       setIsLoading(false); // Desativa o estado de loading após a resposta
     } catch (error) {
       setIsLoading(false); // Desativa o loading em caso de erro
@@ -120,13 +148,70 @@ export function Header() {
     }
   };
 
-  useEffect(() => {
-    fetchNotificationCount(); // Busca o contador de notificações apenas uma vez
-  }, []); // Executa apenas uma vez na montagem
+  const fetchNotificationsLembreteItem = async () => {
+    setIsLoading(true); // Ativa o estado de loading
+    try {
+      const token = getCookie('token'); // Obtém o token de autenticação
+  
+      if (!token) {
+        toast.error('Token de autenticação não encontrado. Faça login novamente.');
+        setIsLoading(false); // Desativa o loading se não houver token
+        return;
+      }
+  
+      // Fazendo a chamada para o serviço de lembretes de hoje
+      const response = await api.get("/lembretes/today", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
+        },
+      });
+  
+      setNotificationsLembrete(response.data); // Atualiza as notificações de lembretes
+      setIsLoading(false); // Desativa o estado de loading após a resposta
+    } catch (error) {
+      setIsLoading(false); // Desativa o loading em caso de erro
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.error || "Erro ao buscar notificações de lembretes.";
+        toast.error(errorMessage);
+        console.error("Erro ao buscar notificações de lembretes:", error.response?.data);
+      } else {
+        toast.error("Erro desconhecido.");
+        console.error("Erro desconhecido:", error);
+      }
+    }
+  };
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      fetchLembretesCount();
+    }, 1000); // Chama a função a cada 1 segundo (1000ms)
+  
+    return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
+  }, []); // O array vazio garante que o efeito só será configurado uma vez
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchJurosClientesCount();
+    }, 1000); // Chama a função a cada 1 segundo (1000ms)
+  
+    return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
+  }, []); // O array vazio garante que o efeito só será configurado uma vez
+
+  useEffect(() => {
+    fetchJurosClientesCount(); // Busca as notificações assim que o componente for montado
+  }, []);
+
+  useEffect(() => {
+    fetchLembretesCount(); // Busca as notificações assim que o componente for montado
+  }, []);
+  
+  useEffect(() => {
     fetchNotificationsJurosItem(); // Busca as notificações assim que o componente for montado
-  }, []); 
+  }, []);
+
+  useEffect(() => {
+    fetchNotificationsLembreteItem(); // Busca as notificações assim que o componente for montado
+  }, []);  
 
   return (
     <>
@@ -148,8 +233,10 @@ export function Header() {
             <a onClick={handleOpenNotifications} className={styles.logoutLink}>
               <div className={styles.bellContainer}>
                 <Bell size={22} color="#FFF" />
-                {notificationCount > 0 && (
-                  <span className={styles.notificationCount}>{notificationCount}</span>
+                {(notificationCount > 0 || lembretesCount > 0) && (
+                  <span className={styles.notificationCount}>
+                    {notificationCount + lembretesCount}
+                  </span>
                 )}
               </div>
             </a>
@@ -168,10 +255,12 @@ export function Header() {
       <Notifications 
         showNotifications={showNotifications}
         setShowNotifications={setShowNotifications}
-        notificationCount={notificationCount}
-        notifications={notifications} // Passando as notificações como props
-        isLoading={isLoading} // Passando o estado de loading para o componente Notifications
+        notificationCount={notificationCount + lembretesCount} // Soma o valor de lembretesCount
+        notificationsJuros={notificationsJuros}
+        notificationLembrete={notificationsLembrete}
+        isLoading={isLoading}
       />
+
 
       {/* Modal de Logout */}
       <Modal
