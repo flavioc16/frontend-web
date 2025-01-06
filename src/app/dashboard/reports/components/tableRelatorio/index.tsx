@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+
+import { useState, useEffect, useRef, useMemo, Suspense  } from 'react';
 import { Search, X, ChevronLeft, ChevronRight, Info, ShoppingBasket} from 'lucide-react';
 import styles from './styles.module.scss';
 
@@ -82,20 +83,24 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
  
   useEffect(() => {
     const currentParams = new URLSearchParams(window.location.search);
-    
+
     if (searchTerm) {
       currentParams.set('search', searchTerm); // Define ou atualiza o parâmetro de busca
     } else {
       currentParams.delete('search'); // Se não houver valor, remove o parâmetro de busca
     }
 
-    // Atualiza a URL com os parâmetros atuais (mantendo dataInicio e dataFim)
+    // Atualiza a URL com os parâmetros atuais (mantendo outros parâmetros)
     window.history.pushState(
       {},
       '',
       `${window.location.pathname}?${currentParams.toString()}`
     );
   }, [searchTerm]);
+
+    if (!searchParams) {
+      return <div>Carregando...</div>; // Fallback enquanto o parâmetro de busca não está disponível
+    }
   
   const openModalWithPurchaseInfo = (purchaseId: string) => {
     setSelectedPurchaseId(purchaseId);
@@ -209,6 +214,7 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
   };
   
   return (
+    <Suspense fallback={<div className={styles.loadingSpinner}><div className={styles.spinner}></div></div>}>
     <div className={styles.tableWrapper}>
       {loading ? (
         <div className={styles.loadingSpinner}>
@@ -403,6 +409,7 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
         </>
       )}
     </div>
+  </Suspense>
   );
   
 }
