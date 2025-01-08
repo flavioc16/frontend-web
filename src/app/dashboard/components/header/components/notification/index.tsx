@@ -74,6 +74,7 @@ const Notifications: React.FC<NotificationsProps> = ({
   // Função para fechar e alterar o notificatin do juros
   const handleNotificationClick = async (id: string) => {
     setShowNotifications(false);
+    setSelected("/");
     try {
       const token = getCookie("token"); // Obtém o token de autenticação
   
@@ -107,7 +108,7 @@ const Notifications: React.FC<NotificationsProps> = ({
 
   const handleNotificationClickLembrete = async (id: string) => {
     setShowNotifications(false); // Fecha as notificações
-    setSelected("reminders"); // Atualiza o contexto para o item de menu "clients"
+    setSelected("reminders");
     try {
       const token = getCookie("token"); // Obtém o token de autenticação
   

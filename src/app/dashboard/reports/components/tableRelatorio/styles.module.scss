@@ -2,11 +2,11 @@
 .tableContainer {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    max-height: 500px; // Altura máxima da tabela
-    overflow-y: auto; // Rolagem vertical quando necessário
+    max-height: 350px; /* Altura máxima da tabela */
+    overflow-y: auto; /* Rolagem vertical quando necessário */
     background-color: var(--lilas-900);
-    position: relative; // Certifique-se de que não há outros elementos posicionados
-}
+    position: relative; /* Certifique-se de que não há outros elementos posicionados */
+  }
 
 .tableWrapper {
     position: relative;
@@ -15,7 +15,7 @@
 }
 
 .header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     background-color: var(--lilas-900);
     display: flex;
     justify-content: space-between;
@@ -35,52 +35,6 @@
 
     .searchContainer {
         position: relative;
-    
-        .filterInput {
-            padding: 0.5rem 2rem 0.5rem 0.5rem;
-            font-size: 0.875rem;
-            border: 1px solid var(--cinza-800);
-            border-radius: 4px;
-            background-color: var(--lilas-800);
-            color: var(--white);
-            outline: none;
-            width: 200px; // Ajuste a largura conforme necessário
-    
-            &:focus {
-                border-color: var(--white);
-            }
-        }
-    
-        .searchIcon {
-            position: absolute;
-            right: 0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--cinza-800);
-            pointer-events: none;
-            font-size: 0.75rem; // Tamanho menor para o ícone de busca
-            transition: opacity 0.3s ease; // Adiciona transição suave para a visibilidade
-        }
-    
-        .clearIcon {
-            position: absolute;
-            right: 0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--cinza-800);
-            pointer-events: auto; // Permite interação com o ícone de limpar
-            font-size: 0.75rem; // Tamanho menor para o ícone "X"
-            opacity: 0; // Inicialmente oculto
-            transition: opacity 0.3s ease; // Adiciona transição suave para a visibilidade
-        }
-    
-        .filterInput:not(:placeholder-shown) ~ .searchIcon {
-            opacity: 0; // Oculta o ícone de busca quando há texto
-        }
-    
-        .filterInput:not(:placeholder-shown) ~ .clearIcon {
-            opacity: 1; // Mostra o ícone "X" quando há texto
-        }
     }
 }
 
@@ -183,24 +137,7 @@
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.filterInput {
-    padding: 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 4px;
-    border: 1px solid var(--cinza-800);
-    color: var(--white);
-    background-color: var(--lilas-800);
-}
 
-.clearIcon {
-    cursor: pointer;
-    color: var(--white);
-}
-
-.searchIcon {
-    cursor: pointer;
-    color: var(--white);
-}
 
 
 .comprasTable {

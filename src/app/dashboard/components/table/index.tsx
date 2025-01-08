@@ -15,6 +15,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import useF2Redirect from "@/app/hooks/useF2Redirect";  // Importando o hook
 import { Compra } from '../../purchases/table';
+import SearchInput from '../searchInput';
 
 export interface Client {
   id: string;
@@ -54,33 +55,6 @@ export function Table ({ clients, loading }: TableClientsProps) {
   const [isEdit, setIsEdit] = useState(false); // Novo estado para controlar se é edição
   const [selectedCompra, setSelectedCompra] = useState<Compra | null>(null);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // const searchParams = useSearchParams();
-
-  // useEffect(() => {
-  //   const querySearchTerm = searchParams.get('search');
-  //   if (querySearchTerm) {
-  //     setSearchTerm(querySearchTerm); // Atualiza o estado se houver um parâmetro de URL
-  //   }
-  // }, [searchParams]);
-
-  // Atualiza a URL sempre que searchTerm mudar
-  useEffect(() => {
-    if (searchTerm) {
-      // Adiciona o parâmetro 'search' na URL
-      window.history.pushState(
-        {},
-        '',
-        `${window.location.pathname}?search=${searchTerm}`
-      );
-    } else {
-      // Remove o parâmetro 'search' se o campo for limpo
-      window.history.pushState({}, '', window.location.pathname);
-    }
-  }, [searchTerm]);
-
-  
 
   useEffect(() => {
     setTotalCompra("0,00");
@@ -88,7 +62,7 @@ export function Table ({ clients, loading }: TableClientsProps) {
 
   const applyFocus = () => {
     if (!isMenuInputFocused && searchInputRef.current && !mouseMoved) {
-      searchInputRef.current.focus();
+      searchInputRef.current.focus(); // Aplica o foco apenas se as condições forem atendidas
     }
   };
 
@@ -142,24 +116,6 @@ export function Table ({ clients, loading }: TableClientsProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isMenuInputFocused, isModalOpen]); // Dependência de isModalOpen
   
-  const handleClientsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setClientsPerPage(Number(event.target.value));
-    setCurrentPage(1);
-  };
-
-  const handleSelectFocus = (event: React.FocusEvent<HTMLSelectElement>) => {
-    event.target.classList.add(styles.dropdownExpanded);
-  };
-
-  const handleSelectBlur = (event: React.FocusEvent<HTMLSelectElement>) => {
-    event.target.classList.remove(styles.dropdownExpanded);
-  };
-
-  const handleSearchClear = () => setSearchTerm('');
-
-  useEffect(() => {
-    setCurrentPage(1); // Reseta para a primeira página quando o termo de busca muda
-  }, [searchTerm]);
 
   const filteredClients = useMemo(() => {
     return clients.filter((client) =>
@@ -240,26 +196,12 @@ export function Table ({ clients, loading }: TableClientsProps) {
             <h1>CLIENTES CADASTRADOS</h1>
             <div className={styles.headerControls}>
               <div className={styles.searchContainer}>
-                <input
-                  type="text"
-                  autoFocus
-                  placeholder="Buscar Cliente"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className={styles.filterInput}
-                  ref={searchInputRef}
-                  aria-label="Buscar Cliente"
+                <SearchInput
+                    placeholder="Buscar Cliente"
+                    onSearch={(value) => setSearchTerm(value)}
+                    setCurrentPage={setCurrentPage}
+                    ref={searchInputRef}
                 />
-                {searchTerm ? (
-                  <X
-                    className={styles.clearIcon}
-                    onClick={handleSearchClear}
-                    role="button"
-                    aria-label="Limpar pesquisa"
-                  />
-                ) : (
-                  <Search className={styles.searchIcon} aria-hidden="true" />
-                )}
               </div>
             </div>
           </div>

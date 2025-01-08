@@ -132,24 +132,28 @@ export default function CreatePurchaseModal({
     if (!descricaoCompra || descricaoCompra.trim() === "") {
       toast.error("Digite uma descrição para a compra.");
       descricaoInputRef.current?.focus();
+      setIsLoading(false);
       return; // Impede a continuação da submissão
     }
-
-    console.log(descricaoCompra);
   
     if (parseFloat(totalCompra.replace(",", ".")) === 0) {
       toast.error("Digite um valor válido para a compra.");
       inputRef.current?.focus();
+      setIsLoading(false);
       return;
     }
   
     const token = getCookie("token");
+    
     if (!token) {
       toast.error("Token de autenticação não encontrado. Faça login novamente.");
+      setIsLoading(false);
       return;
     }
+
     if (!selectedClient?.id) {
       toast.error("Nenhum cliente selecionado.");
+      setIsLoading(false);
       return;
     }
   

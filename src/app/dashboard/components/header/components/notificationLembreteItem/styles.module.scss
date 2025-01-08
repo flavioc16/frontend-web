@@ -1,7 +1,3 @@
-
-
-
-
 .notificationItem {
   display: flex;
   align-items: center;
@@ -9,13 +5,14 @@
   padding-left: 15px;
   padding-right: 0px;
   background-color: #2e343b;  /* Fundo escuro para a notificação */
-  border-bottom: 1px solid var(--cinza-800);
+  border-bottom: 1px solid rgb(87, 87, 87) !important;  /* Borda visível */
   text-decoration: none;
   color: #fff;  /* Cor do texto branca para contraste */
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-top: 0; /* Remover o espaço acima de cada item */
   position: relative; /* Adicionado para permitir o posicionamento absoluto da bolinha */
+  box-sizing: border-box; /* Inclui borda e padding no cálculo da largura/altura */
 }
 
 .notificationItem:hover {
@@ -73,7 +70,7 @@
 }
 
 .notificationItem:last-child {
-  border-bottom: none;
+  border-bottom: none;  /* Remove a borda do último item */
 }
 
 .unreadDot {

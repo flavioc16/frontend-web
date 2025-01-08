@@ -83,6 +83,9 @@ export default function MenuLeft() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.filterInput}
+            autoComplete="off"  // Desativa sugestões automáticas
+            spellCheck="false"  // Desativa a correção ortográfica (se necessário)
+            autoCorrect="off"   // Desativa a correção automática
           />
           {searchTerm ? (
             <X className={styles.clearIcon} onClick={handleSearchClear} />

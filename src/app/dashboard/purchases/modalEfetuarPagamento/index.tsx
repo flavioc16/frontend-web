@@ -105,7 +105,7 @@ export default function PaymentModal({
       setTimeout(() => {
         inputRef.current?.select(); // Seleciona o texto no input
       }, 50); // Pequeno atraso (ajuste conforme necessário)
-    
+      setIsLoading(false);
       return;
     }
     
@@ -121,12 +121,10 @@ export default function PaymentModal({
       setTimeout(() => {
         inputRef.current?.select(); // Seleciona o texto no input
       }, 50); // Pequeno atraso (ajuste conforme necessário)
-    
+      setIsLoading(false);
       return;
     }
     
-    
-
     const token = getCookie("token");
     if (!token) {
       toast.error("Token de autenticação não encontrado. Faça login novamente.");

@@ -1,7 +1,3 @@
-
-
-
-
 .notificationItem {
   display: flex;
   align-items: center;
@@ -9,7 +5,7 @@
   padding-left: 15px;
   padding-right: 0px;
   background-color: #2e343b;  /* Fundo escuro para a notificação */
-  border-bottom: 1px solid var(--cinza-800);
+  border-bottom: 1px solid rgb(87, 87, 87) !important;  /* Borda visível */
   text-decoration: none;
   color: #fff;  /* Cor do texto branca para contraste */
   cursor: pointer;

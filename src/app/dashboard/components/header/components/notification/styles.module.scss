@@ -11,20 +11,22 @@
   overflow-y: auto;  /* Exibe a barra de rolagem vertical se o conteúdo exceder o max-height */
   box-sizing: border-box;  /* Inclui padding no cálculo de largura/altura */
   background-color: #2e343b; /* Cor de fundo das notificações */
-  padding-top: 0; /* Remova o padding superior para eliminar qualquer espaço acima */
+  padding-top: 40px; /* Cria um espaço abaixo do cabeçalho */
 }
 
 .notificationsHeader {
   background-color: #1f242a;
   color: #d8cbcb;
+  width: 330px;
   padding: 10px;
   border-radius: 8px 8px 0 0;
   text-align: center;
-  margin-bottom: 0;  /* Remover qualquer margem indesejada */
-  position: sticky; /* Torna o cabeçalho fixo ao rolar */
-  top: 0;  /* Fica fixo no topo da área de rolagem */
-  z-index: 20;  /* Garante que o cabeçalho fique acima do conteúdo */
+  position: fixed; /* Fixado na tela inteira */
+  top: 55px; /* Ajuste conforme necessário */
+  right: 65px;
+  z-index: 20;
 }
+
 
 .notificationsHeader h6 {
   margin: 0;
@@ -33,8 +35,6 @@
   color: white;
   text-transform: uppercase;
 }
-
-
 
 /* Estilos para o loader e mensagens de "sem notificações" */
 

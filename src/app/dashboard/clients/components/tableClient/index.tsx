@@ -12,6 +12,7 @@ import { Modal, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
 import { getCookie } from 'cookies-next';
 import DeleteModal from '@/app/dashboard/components/modalDelete';
 import { BeatLoader } from 'react-spinners';
+import SearchInput from '@/app/dashboard/components/searchInput';
 
 
 export interface User {
@@ -79,22 +80,7 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
     }
   };
 
-  useEffect(() => {
-    const currentParams = new URLSearchParams(window.location.search);
-    
-    if (searchTerm) {
-      currentParams.set('search', searchTerm); // Define ou atualiza o parâmetro de busca
-    } else {
-      currentParams.delete('search'); // Se não houver valor, remove o parâmetro de busca
-    }
 
-    // Atualiza a URL com os parâmetros atuais (mantendo dataInicio e dataFim)
-    window.history.pushState(
-      {},
-      '',
-      `${window.location.pathname}?${currentParams.toString()}`
-    );
-  }, [searchTerm]);
   
   const [clientName, setClientName] = useState('');
   const [id, setClientId] = useState<string | null>(null);
@@ -442,23 +428,11 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
                 </label>
             </div>
               <div className={styles.searchContainer}>
-                <input
-                  type="text"
+                <SearchInput
                   placeholder="Buscar Cliente"
-                  value={searchTerm}
-                  autoFocus
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className={styles.filterInput}
-                  ref={inputRef}
-                  aria-label="Buscar Cliente"
-                  onFocus={() => setIsMenuInputFocused(true)}
-                  onBlur={() => setIsMenuInputFocused(false)}
+                  onSearch={(value) => setSearchTerm(value)} // Atualiza o termo de busca
+                  setCurrentPage={setCurrentPage} // Passando a função para resetar a página
                 />
-                {searchTerm ? (
-                  <X className={styles.clearIcon} onClick={handleSearchClear} role="button" aria-label="Limpar pesquisa" />
-                ) : (
-                  <Search className={styles.searchIcon} aria-hidden="true" />
-                )}
               </div>
             </div>
             

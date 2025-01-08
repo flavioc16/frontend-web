@@ -90,12 +90,6 @@ body, input, textarea, select, button {
   height: 10px; /* Altura da barra de rolagem horizontal */
 }
 
-/* Estilo da parte de trás da barra de rolagem */
-//::-webkit-scrollbar-track {
-//background:var(--roxo-700); /* Cor do fundo da barra */
-//border-radius: 10px;
-//}
-
 /* Estilo da alça da barra de rolagem */
 ::-webkit-scrollbar-thumb {
   background: var( --cinza-800); /* Cor da alça (thumb) */

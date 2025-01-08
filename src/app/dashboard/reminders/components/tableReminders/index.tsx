@@ -12,148 +12,72 @@ import { getCookie } from 'cookies-next';
 import DeleteModal from '@/app/dashboard/components/modalDelete';
 import { BeatLoader } from 'react-spinners';
 import SearchInput from '@/app/dashboard/components/searchInput';
+import { Reminders } from '@/app/types/lembretes';
 
-export interface Produto {
-  id: string;
-  nome: string;
-  descricao: string;
-  precoAVista: number;
-  precoAPrazo: number;
-  created_at: string | Date; // Aceita tanto string quanto Date
-  updated_at: string | Date;
-}
-
-interface TableProductsProps {
-  produtos: Produto[]; // Lista de produtos
+interface TableRemindersProps {
+  lembretes: Reminders[]; // Lista de Lembretes
   loading: boolean;
-  updateProdutos: () => void; // Tipagem da função passada como prop
+  updateLembretes: () => void; // Tipagem da função passada como prop
 }
 
-export default function TableProducts({ produtos, loading, updateProdutos }: TableProductsProps) {
+export default function TableReminders({ lembretes, loading, updateLembretes }: TableRemindersProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(10);
+  const [RemindersPerPage, setRemindersPerPage] = useState(10);
   const inputRef = useRef<HTMLInputElement>(null);
   const { isMenuInputFocused, setIsMenuInputFocused } = useFocus();
-
   const [showModal, setShowModal] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
-
-  const [nome, setNome] = useState<string>('');
+  const [id, setIdReminders] = useState<string | null>(null);;
   const [descricao, setDescricao] = useState<string>('');
-  const [precoAVista, setPrecoAVista] = useState<number>(0);
-  const [precoAPrazo, setPrecoAPrazo] = useState<number>(0);
+  const [notification, setNotification] = useState<number>(0);
 
-  const [formattedPrecoAVista, setFormattedPrecoAVista] = useState<string>('0,00');
-  const [formattedPrecoAPrazo, setFormattedPrecoAPrazo] = useState<string>('0,00');
-
-  const [checkbox, setCheckbox] = useState(false);
-
-  const nomeProdutoRef = useRef<HTMLInputElement | null>(null);
-  const descricaoProdutoRef = useRef<HTMLTextAreaElement | null>(null);
-  const precoAVistaProdutoRef = useRef<HTMLInputElement | null>(null);
-  const precoAPrazoProdutoRef = useRef<HTMLInputElement | null>(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [id, setProdutoId] = useState<string | null>(null);
-
+  const [dataCadastro, setDataCadastro] = useState('');
   
-  const [productName, setProductName] = useState('');
+  
+  const descricaoLembreteRef = useRef<HTMLTextAreaElement | null>(null);
+  const [checkbox, setCheckbox] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false); // Controle de modo edição
+  const modalTitle = "Deseja realmente excluir este lembrete?";
 
-  const modalTitle = "Deseja realmente excluir este produto?";
-
-  const handleProductsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setProductsPerPage(Number(event.target.value));
+  const handleRemindersPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setRemindersPerPage(Number(event.target.value));
     setCurrentPage(1);
   };
 
   const handleOpenCreateModal = () => {
     setIsEdit(false); // Modo de cadastro
-    setNome('');
     setDescricao('');
-    setPrecoAVista(0);
-    setPrecoAPrazo(0);
-    setFormattedPrecoAVista('0,00')
-    setFormattedPrecoAPrazo('0,00')
+
+    const currentDate = new Date().toISOString().split('T')[0]; 
+    setDataCadastro(currentDate);
+
     setShowModal(true);
   };
 
-  const formatCurrency = (value: number): string => {
-    return (value / 100).toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  };
-
-  const handleOpenEditModal = (produto: Produto) => {
-    setProdutoId(produto.id);
+  const handleOpenEditModal = (lembrete: Reminders) => {
+    setIdReminders(lembrete.id);
     setIsEdit(true);
-    setNome(produto.nome);
-    setDescricao(produto.descricao);
-    setPrecoAVista(produto.precoAVista);
-    setPrecoAPrazo(produto.precoAPrazo)
+    setDescricao(lembrete.descricao);
+  
+    // Ajusta a data no formato YYYY-MM-DD para o input
+    const formattedDate = lembrete.dataCadastro
+      ? new Date(lembrete.dataCadastro).toISOString().split('T')[0]
+      : '';
+    setDataCadastro(formattedDate);
+  
     setShowModal(true);
-
-    // Formatar o valor de preço à vista para exibição
-    setFormattedPrecoAVista(formatCurrency(produto.precoAVista));
-    setFormattedPrecoAPrazo(formatCurrency(produto.precoAPrazo));
   };
-
-  const handlePrecoAVistaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value = event.target.value;
-    const numericValue = value.replace(/[^\d]/g, ""); // Remove caracteres não numéricos
-
-    let rawNumber = parseFloat(numericValue);
-    if (isNaN(rawNumber)) {
-      rawNumber = 0;
-    }
-
-    // Atualiza o estado com o valor numérico
-    setPrecoAVista(rawNumber);
-
-    // Atualiza o valor formatado para exibição no input
-    const formattedValue = (rawNumber / 100).toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-    // Atualiza o estado com o valor formatado
-    setFormattedPrecoAVista(formattedValue);
-  };
-
-  const handlePrecoAPrazoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value = event.target.value;
-    const numericValue = value.replace(/[^\d]/g, ""); // Remove caracteres não numéricos
-
-    let rawNumber = parseFloat(numericValue);
-    if (isNaN(rawNumber)) {
-      rawNumber = 0;
-    }
-
-    // Atualiza o estado com o valor numérico
-    setPrecoAPrazo(rawNumber);
-
-    // Atualiza o valor formatado para exibição no input
-    const formattedValue = (rawNumber / 100).toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-    // Atualiza o estado com o valor formatado
-    setFormattedPrecoAPrazo(formattedValue);
-  };
-
-  const handleOpenModalDelete = (name: string, id: string) => {
-    setProductName(name);
-    setProdutoId(id);
+  
+  const handleOpenModalDelete = (id: string) => {
+    setIdReminders(id);
     setShowModalDelete(true);
   };
 
   const handleCloseModalDelete = () => {
     setShowModalDelete(false);
-    setProductName('');
-    setProdutoId(null);
+    setIdReminders(null);
   };
   
   const handleCloseModal = () => {
@@ -166,78 +90,59 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
     toast.dismiss();
   
     try {
-      // Validação dos campos obrigatórios
-      if (nome === "") {
-        toast.error("O campo Nome é obrigatório.");
-        nomeProdutoRef.current?.focus();
-        return;
-      }
       if (!descricao) {
         toast.error("O campo Descrição é obrigatório.");
-        descricaoProdutoRef.current?.focus();
+        descricaoLembreteRef.current?.focus();
         return;
       }
-      if (precoAVista <= 0) {
-        toast.error(<span>O valor de <strong>Preço à Vista</strong> deve ser maior que zero.</span>);
-        precoAVistaProdutoRef.current?.focus();
-        return;
-      }
-      if (precoAPrazo <= 0) {
-        toast.error(<span>O valor de <strong> Preço a Prazo</strong> deve ser maior que zero.</span>);
-        precoAPrazoProdutoRef.current?.focus();
-        return;
-      }
-  
       const token = getCookie("token");
-  
       if (!token) {
         toast.error("Token de autenticação não encontrado. Faça login novamente.");
         return;
       }
-  
-      const productData = {
-        nome,
-        descricao,
-        precoAVista,
-        precoAPrazo,
-        id: isEdit ? id : undefined, // Inclui o ID apenas no modo edição
-      };
-  
+     
       if (isEdit) {
         if (!id) {
-          throw new Error("ID do produto não fornecido.");
+          throw new Error("ID do lembrete não fornecido.");
         }
-  
-        const response = await api.put(`/produtos`, productData, {
+        
+        const productData = {
+          dataCadastro: new Date(dataCadastro).toISOString(), // Converte para formato ISO
+          notification: false,
+          descricao,
+      };
+        
+        const response = await api.put(`/lembrete/${id}`, productData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
   
-        toast.success(<span>Produto <strong>{response.data.nome}</strong> editado com sucesso.</span>);
-        console.log("Produto editado com sucesso:", response.data);
+        toast.success(<span>Lembrete <strong>{response.data.nome}</strong> editado com sucesso.</span>);
+
       } else {
-        const response = await api.post("/produtos", productData, {
+
+        const productData = {
+          dataCadastro,
+          descricao,
+        };
+
+        const response = await api.post("/lembrete", productData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
   
-        toast.success(<span>Produto <strong>{response.data.nome}</strong> cadastrado com sucesso.</span>);
-        console.log("Produto cadastrado com sucesso:", response.data.nome);
+        toast.success(<span>Lembrete <strong>{response.data.nome}</strong> cadastrado com sucesso.</span>);
+        console.log("Lembrete cadastrado com sucesso:", response.data.nome);
       }
   
-      // Reseta o formulário
-      setNome('');
-      setDescricao('');
-      setPrecoAVista(0);
-      setPrecoAPrazo(0);
-      setFormattedPrecoAVista('0,00')
-      setFormattedPrecoAPrazo('0,00')
-      
-      nomeProdutoRef.current?.focus();
-
-      updateProdutos();
+      if(!isEdit){
+        setDescricao('');
+        descricaoLembreteRef.current?.focus();
+      }
+   
+      updateLembretes();
   
       // Verifica o estado do checkbox antes de fechar o modal
       if (!checkbox) {
@@ -246,9 +151,9 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
-          error.response?.data?.error || (isEdit ? "Erro ao editar produto." : "Erro ao cadastrar produto.");
+          error.response?.data?.error || (isEdit ? "Erro ao editar lembrete." : "Erro ao cadastrar lembrete.");
         toast.error(errorMessage);
-        console.error("Erro ao processar produto:", error.response?.data);
+        console.error("Erro ao processar lembrete:", error.response?.data);
       } else {
         toast.error("Erro desconhecido.");
         console.error("Erro desconhecido:", error);
@@ -269,7 +174,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
         return;
       }
 
-      const response = await api.delete(`/produtos`, {
+      const response = await api.delete(`/lembrete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -277,17 +182,17 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
         data: { id },
       });
 
-      toast.success(<span>Produto <strong>{productName}</strong> excluído com sucesso.</span>);
-      console.log("Produto excluído com sucesso:", response.data);
+      toast.success(<span>Lembrete excluído com sucesso.</span>);
+      console.log("Lembrete excluído com sucesso:", response.data);
 
-      updateProdutos();
+      updateLembretes();
 
       handleCloseModalDelete();
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.error || "Erro ao excluir produto.";
+        const errorMessage = error.response?.data?.error || "Erro ao excluir lembrete.";
         toast.error(errorMessage);
-        console.error("Erro ao excluir produto:", error.response?.data);
+        console.error("Erro ao excluir lembrete:", error.response?.data);
       } else {
         toast.error("Erro desconhecido.");
         console.error("Erro desconhecido:", error);
@@ -305,7 +210,49 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
   useEffect(() => {
     setCurrentPage(1); // Reseta para a primeira página quando o termo de busca muda
   }, [searchTerm]);
+
+  function formatDate(dateString: string): string {
+    if (!dateString) return 'Data não disponível';
   
+    const date = new Date(dateString);
+  
+    // Ajuste de fuso horário (opcional, dependendo da sua necessidade)
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+  
+    // Formata a data no padrão brasileiro (DD/MM/YYYY)
+    return date.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  }
+  
+  function adjustDate(dateString: string): string {
+    return formatDate(dateString); // Retorna a data formatada no formato correto
+  }
+  
+  const filteredReminders = useMemo(() => {
+    const filtered = lembretes.filter((lembrete) => {
+      const searchLower = searchTerm.toLowerCase();
+
+      const formattedDate = lembrete.dataCadastro ? formatDate(lembrete.dataCadastro) : "Data não disponível";
+  
+      const formatCurrency = (value: number): string => {
+        return value
+          .toFixed(2)
+          .replace('.', ',');
+      };
+  
+      return (
+        lembrete.descricao.toLowerCase().includes(searchLower) ||
+        formattedDate.includes(searchLower) 
+      );
+    });
+  
+    return filtered;
+  }, [lembretes, searchTerm]);
+
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isMenuInputFocused) {
@@ -320,26 +267,16 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
     };
   }, [isMenuInputFocused]);
 
-  const handleSearchClear = () => setSearchTerm('');
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckbox(e.target.checked);
-    nomeProdutoRef.current?.focus();
+    descricaoLembreteRef.current?.focus();
   };
 
-  const filteredProducts = useMemo(() => {
-    return produtos.filter((produto) =>
-      // Verifica valores de nível superior do produto
-      Object.values(produto).some(value =>
-        typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-  }, [produtos, searchTerm]);
-  
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const indexOfLastLembrete = currentPage * RemindersPerPage;
+  const indexOfFirstLembrete = indexOfLastLembrete - RemindersPerPage;
+  const currentReminders = filteredReminders.slice(indexOfFirstLembrete, indexOfLastLembrete);
+  const totalPages = Math.ceil(filteredReminders.length / RemindersPerPage);
 
   const handlePageChange = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -396,11 +333,11 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
       ) : (
         <>
           <div className={styles.header}>
-            <h1>PRODUTOS CADASTRADOS</h1>
+            <h1>LEMBRETES CADASTRADOS</h1>
             <div className={styles.headerControls}>
               <ButtonAdd
                 onClick={handleOpenCreateModal}
-                label="Cadastrar Produto"
+                label="Cadastrar Lembrete"
                 icon={<Plus style={{ width: '19px', height: '18px' }} />}
                 iconStyle={{
                   fontSize: '20px',
@@ -413,10 +350,10 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
                 <label htmlFor="resultsPerPage">Exibir:</label>
                 <select
                   id="resultsPerPage"
-                  value={productsPerPage}
-                  onChange={handleProductsPerPageChange}
+                  value={RemindersPerPage}
+                  onChange={handleRemindersPerPageChange}
                   className={styles.customSelect}
-                  aria-label="Número de produtos por página"
+                  aria-label="Número de Lembretes por página"
                 >
                   <option value={10}>10</option>
                   <option value={50}>50</option>
@@ -428,7 +365,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
               </div>
               <div className={styles.searchContainer}>
                 <SearchInput
-                  placeholder="Buscar Produto"
+                  placeholder="Buscar Lembrete"
                   onSearch={(value) => setSearchTerm(value)} // Atualiza o termo de busca
                   setCurrentPage={setCurrentPage} // Passando a função para resetar a página
                 />
@@ -436,66 +373,53 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
             </div>
           </div>
           <div className={styles.tableContainer}>
-           <table className={styles.clientsTable}>
+            <table className={styles.clientsTable}>
               <thead>
                 <tr>
-                  <th>Nome</th>
+                  <th>Data a Notificar</th>
                   <th>Descrição</th>
-                  <th>Preço à Vista</th>
-                  <th>Preço a Prazo</th>
                   <th>Ação</th>
                 </tr>
               </thead>
               <tbody>
-                {currentProducts.length > 0 ? (
-                  currentProducts.map((product: Produto) => (
-                    <tr key={product.id}>
-                      <td>{product.nome}</td>
-                      <td>{product.descricao}</td>
+                {currentReminders.length > 0 ? (
+                  currentReminders.map((reminder: Reminders) => (
+                    <tr key={reminder.id}>
                       <td>
-                        {(product.precoAVista / 100).toLocaleString('pt-BR', {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
+                        {adjustDate(reminder.dataCadastro)}
                       </td>
-                      <td>
-                        {(product.precoAPrazo / 100).toLocaleString('pt-BR', {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </td>
+                      <td>{reminder.descricao}</td>
                       <td className={styles.actionIcons}>
                         <OverlayTrigger
                           trigger={['hover', 'focus']}
                           placement="top"
                           overlay={
-                            <Tooltip id={`tooltip-edit-${product.id}`} className={styles.customTooltip}>
-                              Editar {product.nome}
+                            <Tooltip id={`tooltip-edit-${reminder.id}`} className={styles.customTooltip}>
+                              Editar {reminder.descricao}
                             </Tooltip>
                           }
                         >
-                          
                           <FilePenLine
                             className={styles.iconUser}
                             role="button"
-                            aria-label={`Editar ${product.nome}`}
-                            onClick={() => handleOpenEditModal(product)}
+                            aria-label={`Editar ${reminder.descricao}`}
+                            onClick={() => handleOpenEditModal(reminder)}
                           />
                         </OverlayTrigger>
                         <OverlayTrigger
                           trigger={['hover', 'focus']}
                           placement="top"
                           overlay={
-                            <Tooltip id={`tooltip-trash-${product.id}`} className={styles.customTooltip}>
-                              Deletar {product.nome}
+                            <Tooltip id={`tooltip-trash-${reminder.id}`} className={styles.customTooltip}>
+                              Deletar {reminder.descricao}
                             </Tooltip>
                           }
                         >
                           <Trash
                             className={styles.iconTrash}
                             role="button"
-                            aria-label={`Deletar ${product.nome}`}
-                            onClick={() => handleOpenModalDelete(product.nome, product.id)}
+                            aria-label={`Deletar ${reminder.descricao}`}
+                            onClick={() => handleOpenModalDelete(reminder.id)}
                           />
                         </OverlayTrigger>
                       </td>
@@ -511,7 +435,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
               </tbody>
             </table>
           </div>
-          <div className={`${styles.pagination} ${currentProducts.length ? '' : styles.hidden}`}>
+          <div className={`${styles.pagination} ${currentReminders.length ? '' : styles.hidden}`}>
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -553,67 +477,40 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
             keyboard={!checkbox}
           >
             <div className={styles.customModalHeader}>
-              <h2>{isEdit ? 'Editar Produto' : 'Cadastrar Produto'}</h2>
+              <h2>{isEdit ? 'Editar Lembrete' : 'Cadastrar Lembrete'}</h2>
               <button onClick={handleCloseModal} className={styles.closeButton}>
                 <X size={24} color="var(--white)" />
               </button>
             </div>
             <div className={styles.customModalBody}>
-              <form onSubmit={handleSubmit}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="produtoNome" className={styles.customFormLabel}>Nome</label>
-                  <input
-                    id="produtoNome"
-                    type="text"
-                    ref={nomeProdutoRef}
-                    required
-                    placeholder="Nome do produto"
-                    value={nome}
-                    onChange={(e) => setNome(capitalizeWords(e.target.value))}
-                    autoFocus
-                    className={styles.customFormControl}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label htmlFor="produtoDescricao" className={styles.customFormLabel}>Descrição</label>
-                  <textarea
-                    id="produtoDescricao"
-                    required
-                    rows={3}
-                    placeholder="Descrição do produto"
-                    value={descricao}
-                    ref={descricaoProdutoRef}
-                    onChange={(e) => setDescricao(capitalizeWords(e.target.value))}
-                    className={styles.customFormControl}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label htmlFor="produtoPrecoAVista" className={styles.customFormLabel}>Preço à Vista</label>
-                  <input
-                    id="produtoPrecoAVista"
-                    type="text"
-                    ref={precoAVistaProdutoRef}
-                    value={formattedPrecoAVista}
-                    onChange={handlePrecoAVistaChange}
-                    placeholder="Preço à Vista"
-                    required
-                    className={styles.customFormControl}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label htmlFor="produtoPrecoAPrazo" className={styles.customFormLabel}>Preço a Prazo</label>
-                  <input
-                    id="produtoPrecoAPrazo"
-                    type="text"
-                    value={formattedPrecoAPrazo}
-                    ref={precoAPrazoProdutoRef}
-                    onChange={handlePrecoAPrazoChange}
-                    placeholder="Preço a Prazo"
-                    required
-                    className={styles.customFormControl}
-                  />
-                </div>
-                <div className={styles.buttonContainer}>
+            <form onSubmit={handleSubmit}>
+              <div className={styles.formGroup}>
+                <label htmlFor="descricao" className={styles.customFormLabel}>Descrição</label>
+                <textarea
+                  id="descricao"
+                  autoFocus
+                  required
+                  placeholder="Descrição do lembrete"
+                  value={capitalizeWords(descricao)}
+                  ref={descricaoLembreteRef}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescricao(e.target.value)}
+                  className={styles.customFormControl}
+                  rows={3} // Define a altura inicial do textarea
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="dataCadastro" className={styles.customFormLabel}>Data</label>
+                <input
+                  id="dataCadastro"
+                  type="date"
+                  value={dataCadastro} // Verifica se é uma instância válida de Date
+                  onChange={(e) => setDataCadastro(e.target.value)} 
+                  required
+                  className={styles.customFormControl}
+                />
+              </div>
+              <div className={styles.buttonContainer}>
                   <div className={styles.rememberMeContainer}>
                     {!isEdit && (
                       <label>
@@ -640,8 +537,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
                     </button>
                   </div>
                 </div>
-
-              </form>
+            </form>
             </div>
           </Modal>
 

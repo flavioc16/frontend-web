@@ -3,48 +3,57 @@
 import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { api } from "@/services/api";
-import { getCookie } from "cookies-next"; // Função para obter cookies
-import { TableClients } from "../clients/components/tableClient";
+import { getCookie } from "cookies-next";
+import TableReminders from "./components/tableReminders";
 
-export interface Client {
-  id: string;
-  nome: string;
-  email?: string;
-  telefone: string;
-  endereco?: string;
-  referencia?: string;
-  created_at: string;
-  updated_at: string;
-  userId: string;
-}
+import { Reminders } from "@/app/types/lembretes";
 
-export default function Clients() {
-  const [clients, setClients] = useState<Client[]>([]); // Tipagem dos clientes
-  const [loading, setLoading] = useState(true); // Estado de carregamento
+export default function Lembretes() {
+  const [lembretes, setLembretes] = useState<Reminders[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchClients() {
+    async function fetchsetLembretes() {
       try {
         const token = getCookie("token"); // Obtém o token dos cookies
-        const response = await api.get("/clients", {
+        const response = await api.get("/lembretes", {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho da requisição
           },
         });
-        setClients(response.data);
+        setLembretes(response.data);
       } catch (error) {
-        console.error("Erro ao buscar clientes:", error);
+        console.error("Erro ao buscar lembretes:", error);
       } finally {
         setLoading(false); // Define loading como false quando a chamada termina
       }
     }
 
-    fetchClients();
+    fetchsetLembretes();
+    
   }, []);
 
+  // Função para atualizar produtos
+  const updateLembretes = async () => {
+    try {
+      const token = getCookie("token");
+      const responseProdutos = await api.get("/lembretes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Verifique se a API retorna `response.data.produtos` ou apenas `response.data`
+      const LembretesData = responseProdutos.data.produtos || responseProdutos.data;
+      setLembretes(LembretesData); // Atualiza o estado de forma consistente
+    } catch (error) {
+      console.error("Erro ao atualizar produtos:", error);
+    }
+  };
+  
   return (
     <main className={styles.contentArea}>
-      <TableClients clients={clients} loading={loading} />
+      <TableReminders lembretes={lembretes} loading={loading} updateLembretes={updateLembretes} />
     </main>
   );
 }

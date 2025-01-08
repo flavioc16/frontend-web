@@ -5,12 +5,6 @@ import { api } from "@/services/api";
 import { getCookie } from "cookies-next";
 import { Table } from "./components/table";
 import FeaturedCard from "./components/featuredCard";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-
-
-
-import { Product } from "./products/page";
 
 import styles from "./page.module.scss";
 
@@ -18,7 +12,7 @@ import ModalCadastrarCliente from "./clients/components/modalCadastrarCliente";
 import ModalCadastrarProduto from "./products/components/modalCadastrarProduto";
 
 import { ShoppingCart, DollarSign, UserPlus, ScanBarcode } from "lucide-react";
-import { TableClients } from "./clients/components/tableClient";
+
 
 export interface Client {
   id: string;

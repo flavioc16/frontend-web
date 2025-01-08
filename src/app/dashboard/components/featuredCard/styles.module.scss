@@ -8,6 +8,26 @@
   width: 100%; /* Garante que o conteúdo ocupe toda a largura do card */
 }
 
+.cardHeader {
+  font-size: 16px;
+  white-space: nowrap; /* Impede a quebra de linha */
+  overflow: hidden; /* Esconde o conteúdo que ultrapassa o limite */
+  text-overflow: ellipsis;  /* Adiciona '...' quando o conteúdo ultrapassa o limite */
+  
+  @media (max-width: 480px) {
+    font-size: 12px;  /* Tamanho para telas pequenas */
+  }
+
+  @media (max-width: 1000px) {
+    font-size: 15px;  /* Tamanho para telas médias */
+  }
+
+  @media (min-width: 1001px) {
+    font-size: 16px;  /* Tamanho para telas grandes */
+  }
+}
+
+
 
 .loadingIcon {
   margin-bottom: 15px;
