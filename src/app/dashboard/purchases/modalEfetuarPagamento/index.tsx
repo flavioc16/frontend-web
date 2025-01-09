@@ -27,6 +27,7 @@ export default function PaymentModal({
   const [rawValue, setRawValue] = useState(0); // Valor bruto
   const [initialPaymentValue, setInitialPaymentValue] = useState(0); // Valor bruto
   const [isLoading, setIsLoading] = useState(false);
+  
 
   // Formatação para o formato pt-BR
   const formatToCurrency = (value: number) => {
@@ -108,6 +109,9 @@ export default function PaymentModal({
       setIsLoading(false);
       return;
     }
+
+    console.log("Valor do pagamento:", paymentValue);
+    console.log("Valor do banco:", totalValue);
     
     if (paymentValue > totalValue) {
       // Restaura o valor inicial

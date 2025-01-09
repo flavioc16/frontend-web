@@ -1,5 +1,111 @@
-.contentArea{
+.contentArea {
     width: 100%;
-    margin-top: 1rem;
-    margin-bottom: 3rem;
+    margin-top: 1.5rem;
+}
+
+.filterContainer {
+    padding: 0 15px; /* Apenas padding nas laterais (direita e esquerda) */
+    border-radius: 8px; /* Borda arredondada */
+    
+    h2 {
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+  form {
+      display: flex;
+      flex-direction: column;
   }
+
+  .dateInputs {
+      display: flex;
+      flex-direction: column; /* Mantém os inputs empilhados */
+      gap: 5px; /* Mantém um pequeno espaço entre os campos */
+      
+      label {
+          display: flex;
+          flex-direction: column;
+          font-size: 18px;
+          margin-bottom: 1px; /* Ajuste a margem inferior para mover o label mais para baixo */
+      }
+
+   
+  }
+
+  .dateInputs input[type="date"] {
+      -webkit-appearance: none; /* Remove o estilo padrão no Safari e Chrome */
+      -moz-appearance: none; /* Remove o estilo padrão no Firefox */
+      appearance: none; /* Remove o estilo padrão nos navegadores que suportam */
+    
+      padding: 6px; /* Ajusta o padding */
+      font-size: 16px; /* Ajusta o tamanho da fonte */
+      border: 1px solid var(--cinza-800); /* Define a borda */
+      border-radius: 4px; /* Bordas arredondadas */
+      background-color: var(--roxo-700); /* Cor de fundo */
+      color: var(--white); /* Cor do texto */
+      outline: none; /* Remove o contorno ao foco */
+    
+      /* Ícone do calendário */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10m2 10H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z'/%3E%3C/svg%3E"); /* Ícone personalizado */
+      background-repeat: no-repeat;
+      background-position: calc(100% - 0.6rem) center; /* Ajusta a posição do ícone */
+      background-size: 1.2rem; /* Tamanho do ícone */
+      
+  }
+  
+  .dateInputs input[type="date"]::-webkit-calendar-picker-indicator {
+      opacity: 0; /* Esconde o ícone padrão no Chrome/Safari */
+      cursor: pointer;
+  }
+  
+    .searchButton {
+        align-self: center; /* Centralizei o botão */
+        padding: 8px 20px; /* Padding nos lados (direita e esquerda) */
+        background-color: green;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%; /* O botão ocupa toda a largura disponível */
+        max-width: 150px; /* Limitei a largura do botão para ficar mais compacto */
+
+        &:hover {
+            background-color: rgb(22, 139, 22);
+        }
+    }
+}
+
+.customFormLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+    font-size: 104px;
+}
+
+.customFormControl {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--cinza-800);
+    background-color: var(--roxo-700);
+    color: var(--white);
+    outline: none;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.buttonContainer {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.pageTitle {
+    color: var(--white);
+    font-size: 18px;
+}

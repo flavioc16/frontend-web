@@ -428,7 +428,7 @@ export default function TableReminders({ lembretes, loading, updateLembretes }: 
                 ) : (
                   <tr>
                     <td colSpan={7} className={styles.noRecords}>
-                      Nenhum registro encontrado
+                      Nenhum lembrete encontrado
                     </td>
                   </tr>
                 )}

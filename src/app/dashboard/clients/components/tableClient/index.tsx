@@ -504,7 +504,7 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
                 ) : (
                   <tr>
                     <td colSpan={8} className={styles.noRecords}>
-                      Nenhum registro encontrado
+                      Nenhum cliente encontrado
                     </td>
                   </tr>
                 )}

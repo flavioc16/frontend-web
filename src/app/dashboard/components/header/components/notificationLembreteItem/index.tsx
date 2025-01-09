@@ -26,7 +26,7 @@ const NotificationLembreteItem: React.FC<NotificationLembreteItemProps> = ({ not
         <div className={styles.iconContainer}>
           <div className={styles.iconCircleBgInfo}>
             <Info 
-              size={23} 
+              size={22} 
               color="#FFF" 
             />
           </div>

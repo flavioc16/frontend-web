@@ -504,7 +504,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
                 ) : (
                   <tr>
                     <td colSpan={7} className={styles.noRecords}>
-                      Nenhum registro encontrado
+                      Nenhum produto encontrado
                     </td>
                   </tr>
                 )}

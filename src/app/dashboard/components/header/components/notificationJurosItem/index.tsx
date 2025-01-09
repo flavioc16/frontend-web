@@ -6,7 +6,7 @@ interface Notification {
   id: string;
   title: string;
   details: string;
-  dueDate: string; // Data no formato "YYYY-MM-DD"
+  dueDate: string;
   status: number;
   link: string;
 }
@@ -26,7 +26,7 @@ const NotificationJurosItem: React.FC<NotificationJurosItemProps> = ({ notificat
         <div className={styles.iconContainer}>
           <div className={styles.iconCircleBgDanger}>
             <TriangleAlert 
-              size={24} 
+              size={20} 
               color="#FFF" 
               style={{ marginTop: '-4px' }} // Ajuste o valor conforme necessário
             />

@@ -50,8 +50,6 @@ export interface RelatorioComprasResponse {
 }
 
 export default function Relatorios() {
-  const router = useRouter();
-  //const searchParams = useSearchParams();
 
   const [compras, setCompras] = useState<Compra[]>([]);
   const [loading, setLoading] = useState(true);

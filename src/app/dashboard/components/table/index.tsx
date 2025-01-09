@@ -270,7 +270,7 @@ export function Table ({ clients, loading }: TableClientsProps) {
                 ) : (
                   <tr>
                     <td colSpan={5} className={styles.noRecords}>
-                      Nenhum registro encontrado
+                      Nenhum cliente encontrado
                     </td>
                   </tr>
                 )}
