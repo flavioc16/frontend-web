@@ -396,7 +396,7 @@ export default function TableProducts({ produtos, loading, updateProdutos }: Tab
       ) : (
         <>
           <div className={styles.header}>
-            <h1>PRODUTOS CADASTRADOS</h1>
+            <h1>PRODUTOS</h1>
             <div className={styles.headerControls}>
               <ButtonAdd
                 onClick={handleOpenCreateModal}

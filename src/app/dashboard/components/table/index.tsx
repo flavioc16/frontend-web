@@ -193,7 +193,7 @@ export function Table ({ clients, loading }: TableClientsProps) {
       ) : (
         <>
           <div className={styles.header}>
-            <h1>CLIENTES CADASTRADOS</h1>
+            <h1>CLIENTES</h1>
             <div className={styles.headerControls}>
               <div className={styles.searchContainer}>
                 <SearchInput

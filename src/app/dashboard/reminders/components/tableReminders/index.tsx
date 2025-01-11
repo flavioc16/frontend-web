@@ -333,7 +333,7 @@ export default function TableReminders({ lembretes, loading, updateLembretes }: 
       ) : (
         <>
           <div className={styles.header}>
-            <h1>LEMBRETES CADASTRADOS</h1>
+            <h1>LEMBRETES</h1>
             <div className={styles.headerControls}>
               <ButtonAdd
                 onClick={handleOpenCreateModal}

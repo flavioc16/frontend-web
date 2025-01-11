@@ -176,6 +176,7 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
       ) : (
         <>
           <div className={styles.header}>
+          <h1>RELATÓRIOS</h1>
             <div className={styles.headerControls}>
               <div className={styles.resultsPerPage}>
                 <label htmlFor="resultsPerPage">Exibir:</label>

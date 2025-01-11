@@ -152,6 +152,7 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading}: DadosPa
       ) : (
         <>
           <div className={styles.header}>
+            <h1>PAGAMENTOS</h1>
             <div className={styles.headerControls}>
               <div className={styles.resultsPerPage}>
                 <label htmlFor="resultsPerPage">Exibir:</label>

@@ -397,7 +397,7 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
       ) : (
         <>
           <div className={styles.header}>
-            <h1>CLIENTES CADASTRADOS</h1>
+            <h1>CLIENTES</h1>
             <div className={styles.headerControls}>
             <ButtonAdd
               onClick={handleOpenCreateModal}
