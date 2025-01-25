@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { X } from "lucide-react";
 import styles from "./styles.module.scss";
 import { getCookie } from "cookies-next";
@@ -8,7 +8,7 @@ import { api } from "@/services/api";
 interface PurchaseInfoModalProps {
   showModalInfo: boolean;
   handleCloseModalInfo: () => void;
-  purchaseId: string; // ID da compra recebida via prop
+  purchaseId: string;
 }
 
 interface PurchaseInfo {
@@ -16,8 +16,8 @@ interface PurchaseInfo {
   descricaoCompra: string;
   totalCompra: number;
   valorInicialCompra: number;
-  tipoCompra: number; // 0 ou 1
-  statusCompra: number; // 0: pendente, 1: pago
+  tipoCompra: number;
+  statusCompra: number;
   created_at: string;
   updated_at: string;
   dataDaCompra: string;
@@ -51,12 +51,12 @@ export default function PurchaseInfoModal({
   purchaseId,
 }: PurchaseInfoModalProps) {
   const [purchaseInfo, setPurchaseInfo] = useState<PurchaseInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (purchaseId && showModalInfo) {
-      // Simulando a chamada à API para obter as informações da compra
-      // Troque isso pela chamada real à API
       const fetchPurchaseInfo = async () => {
+        setIsLoading(true);
         try {
           const token = getCookie("token");
           const response = await api.get(`/compras/${purchaseId}`, {
@@ -64,17 +64,17 @@ export default function PurchaseInfoModal({
               Authorization: `Bearer ${token}`,
             },
           });
-  
           setPurchaseInfo(response.data);
         } catch (error) {
           console.error("Erro ao carregar as informações da compra:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
-      
       fetchPurchaseInfo();
     }
   }, [purchaseId, showModalInfo]);
-  
+
   return (
     <Modal
       show={showModalInfo}
@@ -90,17 +90,20 @@ export default function PurchaseInfoModal({
         </button>
       </div>
       <div className={styles.customModalBody}>
-        {purchaseInfo ? (
+        {isLoading ? (
+          <div className={styles.loadingContainer}>
+            <Spinner animation="border" className={styles.spinner} />
+          </div>
+        ) : purchaseInfo ? (
           <div>
-              <h2>Compra</h2>
-            {/* Informações principais */}
+            <h2>Compra</h2>
             <div className={styles.infoRow}>
               <strong>Descrição:</strong> {purchaseInfo.descricaoCompra}
             </div>
             <div className={styles.infoRow}>
               <strong>Data da Compra:</strong>{" "}
               {new Date(purchaseInfo.dataDaCompra).toLocaleString("pt-BR", {
-                timeZone: "America/Sao_Paulo", // Ajuste para o fuso horário desejado
+                timeZone: "America/Sao_Paulo",
                 weekday: "long",
                 year: "numeric",
                 month: "long",
@@ -133,16 +136,13 @@ export default function PurchaseInfoModal({
               <strong>Está vencida?:</strong> {purchaseInfo.isVencida ? "Sim" : "Não"}
             </div>
 
-            {/* Juros */}
             {purchaseInfo.juros && purchaseInfo.juros.length > 0 && (
               <div className={styles.section}>
                 <h2>Juros</h2>
                 {purchaseInfo.juros.map((juros, index) => (
                   <div key={juros.id} className={styles.infoRow}>
-                    
                     <strong>Juros #{index + 1}:</strong>{" "}
                     {new Date(juros.created_at).toLocaleDateString("pt-BR")}
-                    
                     <br />
                     <strong>Descrição:</strong> {juros.descricao}
                     <br />
@@ -156,7 +156,6 @@ export default function PurchaseInfoModal({
               </div>
             )}
 
-            {/* Pagamentos */}
             {purchaseInfo.pagamentos && purchaseInfo.pagamentos.length > 0 && (
               <div className={styles.section}>
                 <h2>Pagamentos</h2>
@@ -174,7 +173,6 @@ export default function PurchaseInfoModal({
               </div>
             )}
 
-            {/* Botões */}
             <div className={styles.buttonContainer}>
               <div className={styles.buttonGroup}>
                 <button
@@ -188,10 +186,9 @@ export default function PurchaseInfoModal({
             </div>
           </div>
         ) : (
-          <p>Carregando informações...</p>
+          <p>Erro ao carregar informações.</p>
         )}
       </div>
     </Modal>
-
   );
 }
