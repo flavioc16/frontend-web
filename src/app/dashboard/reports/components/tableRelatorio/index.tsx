@@ -5,12 +5,6 @@ import styles from './styles.module.scss';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Link from "next/link";
 
-import { useRouter } from 'next/router';
-
-import { useSearchParams } from 'next/navigation';
-
-
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,10 +12,16 @@ import PurchaseInfoModal from '@/app/dashboard/purchases/modalMostrarInfo';
 import SearchInput from '@/app/dashboard/components/searchInput';
 
 export interface Cliente {
-    nome: string;
-    id: string;
+  id: string;
+  nome: string;
+  endereco: string;
+  referencia: string;
+  email: string;
+  telefone: string;
+  created_at: Date;
+  updated_at: Date;
 }
-  
+
 export interface Juros {
     // Defina os campos relevantes de "juros", caso existam
 }
@@ -94,30 +94,31 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
   }
 
   function adjustDate(dateString: string): string {
-    return formatDate(dateString); // Utiliza a mesma função de formatação
+    return formatDate(dateString);
   }
   
   const filteredCompras = useMemo(() => {
+    const searchLower = searchTerm.toLowerCase();
+  
+    const formatCurrency = (value: number): string =>
+      value.toFixed(2).replace(".", ",");
+  
+    const formatValue = (value: any): string => {
+      if (typeof value === "number") return formatCurrency(value);
+      if (value instanceof Date) return formatDate(value.toISOString()); 
+      if (typeof value === "string") return value.toLowerCase();
+      return "";
+    };
+  
     const filtered = compras.filter((compra) => {
-      const searchLower = searchTerm.toLowerCase();
-  
-      // Utilize a função unificada para formatar a data
-      const formattedDate = compra.dataDaCompra
-        ? formatDate(compra.dataDaCompra)
-        : "Data não disponível";
-  
-      const formatCurrency = (value: number): string => {
-        return value
-          .toFixed(2)
-          .replace('.', ',');
-      };
-  
-      return (
-        compra.descricaoCompra.toLowerCase().includes(searchLower) || // Busca na descrição
-        formattedDate.includes(searchLower) || // Busca na data formatada
-        formatCurrency(compra.totalCompra).includes(searchLower) || // Busca no total formatado
-        compra.cliente?.nome.toLowerCase().includes(searchLower) // Busca no nome do cliente
-      );
+      return Object.values(compra).some((value) => {
+        if (typeof value === "object" && value !== null) {
+          return Object.values(value)
+            .map(formatValue)
+            .some((v) => v.includes(searchLower));
+        }
+        return formatValue(value).includes(searchLower);
+      });
     });
   
     const total = filtered.reduce((acc, compra) => acc + compra.totalCompra, 0);
@@ -125,7 +126,6 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
   
     return filtered;
   }, [compras, searchTerm]);
-  
   
   const indexOfLastCompra = currentPage * comprasPerPage;
   const indexOfFirstCompra = indexOfLastCompra - comprasPerPage;
@@ -226,7 +226,7 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
                         {adjustDate(compra.dataDaCompra ?? '')}
                       </td>
                       <td>{compra.descricaoCompra}</td>
-                      <td>{compra.cliente?.nome}</td>
+                      <td>{compra.cliente?.nome} | {compra.cliente?.referencia} </td>
                       <td>
                         {compra.totalCompra.toLocaleString('pt-BR', {
                           style: 'currency',

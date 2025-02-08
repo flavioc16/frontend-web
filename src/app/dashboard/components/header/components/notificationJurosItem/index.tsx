@@ -28,7 +28,7 @@ const NotificationJurosItem: React.FC<NotificationJurosItemProps> = ({ notificat
             <TriangleAlert 
               size={20} 
               color="#FFF" 
-              style={{ marginTop: '-4px' }} // Ajuste o valor conforme necessário
+              style={{ marginTop: '-4px' }}
             />
           </div>
         </div>
@@ -37,7 +37,7 @@ const NotificationJurosItem: React.FC<NotificationJurosItemProps> = ({ notificat
           <div className={styles.notificationDetails}>
             <span className={styles.notificationAmount}>{details}</span>
             <div className={styles.notificationDate}>
-              Data de vencimento: {dueDate} {/* Exibindo a data diretamente */}
+              Data de vencimento: {dueDate}
             </div>
             {status === 0 && <div className={styles.unreadDot}></div>}
           </div>

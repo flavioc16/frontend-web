@@ -46,7 +46,6 @@ export default function Clients() {
 
   return (
     <main className={styles.contentArea}>
-      {/* Passando a função updateClientes como prop */}
       <TableClients clients={clients} loading={loading} updateClientes={updateClientes} />
     </main>
   );

@@ -8,8 +8,14 @@ import { getCookie } from "cookies-next";
 import { TableRelatorio } from "./components/tableRelatorio";
 
 export interface Cliente {
-  nome: string;
   id: string;
+  nome: string;
+  endereco: string;
+  referencia: string;
+  email: string;
+  telefone: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface Juros {}
