@@ -94,31 +94,31 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
   }
 
   function adjustDate(dateString: string): string {
-    return formatDate(dateString);
+    return formatDate(dateString); // Utiliza a mesma função de formatação
   }
   
   const filteredCompras = useMemo(() => {
-    const searchLower = searchTerm.toLowerCase();
-  
-    const formatCurrency = (value: number): string =>
-      value.toFixed(2).replace(".", ",");
-  
-    const formatValue = (value: any): string => {
-      if (typeof value === "number") return formatCurrency(value);
-      if (value instanceof Date) return formatDate(value.toISOString()); 
-      if (typeof value === "string") return value.toLowerCase();
-      return "";
-    };
-  
     const filtered = compras.filter((compra) => {
-      return Object.values(compra).some((value) => {
-        if (typeof value === "object" && value !== null) {
-          return Object.values(value)
-            .map(formatValue)
-            .some((v) => v.includes(searchLower));
-        }
-        return formatValue(value).includes(searchLower);
-      });
+      const searchLower = searchTerm.toLowerCase();
+  
+  
+      const formattedDate = compra.dataDaCompra
+        ? formatDate(compra.dataDaCompra)
+        : "Data não disponível";
+  
+      const formatCurrency = (value: number): string => {
+        return value
+          .toFixed(2)
+          .replace('.', ',');
+      };
+  
+      return (
+        compra.descricaoCompra.toLowerCase().includes(searchLower) || // Busca na descrição
+        formattedDate.includes(searchLower) || // Busca na data formatada
+        formatCurrency(compra.totalCompra).includes(searchLower) || // Busca no total formatado
+        compra.cliente?.nome.toLowerCase().includes(searchLower) ||
+        compra.cliente?.referencia.toLowerCase().includes(searchLower) 
+      );
     });
   
     const total = filtered.reduce((acc, compra) => acc + compra.totalCompra, 0);
@@ -126,6 +126,7 @@ export function TableRelatorio({ compras, somaTotalCompras, loading}: RelatorioC
   
     return filtered;
   }, [compras, searchTerm]);
+  
   
   const indexOfLastCompra = currentPage * comprasPerPage;
   const indexOfFirstCompra = indexOfLastCompra - comprasPerPage;
