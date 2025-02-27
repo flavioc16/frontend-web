@@ -520,7 +520,7 @@ export default function TableReminders({ lembretes, loading, updateLembretes }: 
                           onChange={handleCheckboxChange}
                         />
                         <div className={styles.rememberMeText}>
-                          Adicionar mais produtos
+                          Adicionar mais lembretes
                         </div>
                       </label>
                     )}

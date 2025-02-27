@@ -95,7 +95,7 @@ export function TableClients({ clients, loading, updateClientes }: TableClientsP
   };
 
   const handleOpenCreateModal  = () => {
-    setIsEdit(false); // Modo de cadastro
+    setIsEdit(false); 
     setNome('');
     setEmail('');
     setTelefone('');

@@ -236,7 +236,7 @@ export function TableCompras({ compras, somaTotalCompras, loading, cliente, upda
   }
 
   function adjustDate(dateString: string): string {
-    return formatDate(dateString); // Utiliza a mesma função de formatação
+    return formatDate(dateString); 
   }
   
   const filteredCompras = useMemo(() => {

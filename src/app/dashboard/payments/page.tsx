@@ -1,25 +1,18 @@
-"use client";
-
+'use client';
 import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { api } from "@/services/api";
 import { getCookie } from "cookies-next";
 import { TablePagamentos } from "./components/tableRelatorio";
 
-interface Cliente {
+interface PagamentoAgrupado {
   nome: string;
-}
-
-interface PagamentoComDados {
-  id: string;
-  valorPagamento: number;
-  cliente: Cliente;
-  created_at: string;
-  totalPagamentos: number;
+  referencia: string;
+  totalPagamento: number;
 }
 
 interface DadosPagamentos {
-  pagamentos: PagamentoComDados[];
+  pagamentos: PagamentoAgrupado[];
   totalPagamentos: number;
 }
 
@@ -55,7 +48,16 @@ export default function Pagamentos() {
           dataFim,
         },
       });
-      setPagamentos(response.data);
+
+      // Garantir que os dados estejam no formato correto
+      setPagamentos({
+        pagamentos: response.data.pagamentos.map((p: any) => ({
+          nome: p.nome,
+          referencia: p.referencia,
+          totalPagamento: p.totalPagamento,
+        })),
+        totalPagamentos: response.data.totalPagamentos,
+      });
       setTotalPagamentos(response.data.totalPagamentos);
     } catch (error) {
       console.error("Erro ao buscar pagamentos:", error);
@@ -63,8 +65,6 @@ export default function Pagamentos() {
       setLoading(false);
     }
   }
-
-  
 
   return (
     <main className={styles.contentArea}>

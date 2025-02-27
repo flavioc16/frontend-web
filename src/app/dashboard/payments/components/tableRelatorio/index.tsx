@@ -1,108 +1,67 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X, ChevronLeft, ChevronRight, Info, ShoppingBasket} from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './styles.module.scss';
-
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Link from "next/link";
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import PurchaseInfoModal from '@/app/dashboard/purchases/modalMostrarInfo';
 import SearchInput from '@/app/dashboard/components/searchInput';
 
-
-  
-interface Cliente {
+// Ajuste das interfaces
+interface PagamentoAgrupado {
   nome: string;
-}
-
-interface PagamentoComDados {
-  id: string;
-  valorPagamento: number;
-  cliente: Cliente;
-  created_at: string;
-  totalPagamentos: number;
+  referencia: string;
+  totalPagamento: number;
 }
 
 interface DadosPagamentos {
-  pagamentos: PagamentoComDados[];
+  pagamentos: PagamentoAgrupado[];
   totalPagamentos: number;
   loading: boolean;
 }
 
-export function TablePagamentos({ pagamentos, totalPagamentos, loading}: DadosPagamentos) {
-
+export function TablePagamentos({ pagamentos, totalPagamentos, loading }: DadosPagamentos) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [pagamentosPerPage, setpagamentosPerPage] = useState(10);
+  const [pagamentosPerPage, setPagamentosPerPage] = useState(10);
   const [somaAtual, setSomaAtual] = useState<number>(0);
 
   const [showModalInfo, setShowModalInfo] = useState(false);
-  const [selectedPurchaseId, setSelectedPurchaseId] = useState<string>("");
+  const [selectedPurchaseId, setSelectedPurchaseId] = useState<string>('');
 
   const openModalWithPaymentInfo = (purchaseId: string) => {
     setSelectedPurchaseId(purchaseId);
     setShowModalInfo(true);
   };
 
-  // Função para fechar o modal
   const handleCloseModalInfo = () => {
     setShowModalInfo(false);
   };
 
-  function formatDate(dateString: string): string {
-    if (!dateString) return '';
-  
+  // Função para formatação de data
+  const adjustDate = (dateString: string): string => {
     const date = new Date(dateString);
-    // Ajusta a data conforme o fuso horário universal
     date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-  
-    // Retorna a data formatada no padrão brasileiro
     return date.toLocaleDateString('pt-BR');
-  }
+  };
 
-  function adjustDate(dateString: string): string {
-    return formatDate(dateString); // Utiliza a mesma função de formatação
-  }
-  
+  // Filtrando os pagamentos com base no termo de busca
   const filteredPagamentos = useMemo(() => {
     const filtered = pagamentos.filter((pagamento) => {
       const searchLower = searchTerm.trim().toLowerCase();
-  
-      const formatCurrency = (value: number): string => {
-        return value.toFixed(2).replace('.', ',');
-      };
-  
-      const formatDate = (dateString: string): string => {
-        if (!dateString) return '';
-  
-        const date = new Date(dateString);
-        // Ajusta a data conforme o fuso horário universal
-        date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-  
-        // Formata a data no formato "dd/MM/yyyy"
-        return date.toLocaleDateString('pt-BR', { 
-          day: '2-digit', 
-          month: '2-digit', 
-          year: 'numeric' 
-        }).toLowerCase(); // Converte a data para letras minúsculas
-      };
-  
+
       return (
-        pagamento.cliente?.nome.toLowerCase().includes(searchLower) ||
-        formatDate(pagamento.created_at).includes(searchLower) ||
-        formatCurrency(pagamento.valorPagamento).includes(searchLower)
+        pagamento.nome.toLowerCase().includes(searchLower) ||
+        pagamento.referencia.toLowerCase().includes(searchLower) ||
+        pagamento.totalPagamento.toString().includes(searchLower)
       );
     });
-  
-    const total = filtered.reduce((acc, pagamento) => acc + pagamento.valorPagamento, 0);
+
+    const total = filtered.reduce((acc, pagamento) => acc + pagamento.totalPagamento, 0);
     setSomaAtual(total);
-  
+
     return filtered;
   }, [pagamentos, searchTerm]);
-  
-  
+
   const indexOfLastPagamento = currentPage * pagamentosPerPage;
   const indexOfFirstPagamento = indexOfLastPagamento - pagamentosPerPage;
   const currentPagamentos = filteredPagamentos.slice(indexOfFirstPagamento, indexOfLastPagamento);
@@ -142,7 +101,7 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading}: DadosPa
 
     return pagination;
   };
-  
+
   return (
     <div className={styles.tableWrapper}>
       {loading ? (
@@ -159,7 +118,7 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading}: DadosPa
                 <select
                   id="resultsPerPage"
                   value={pagamentosPerPage}
-                  onChange={(e) => setpagamentosPerPage(Number(e.target.value))}
+                  onChange={(e) => setPagamentosPerPage(Number(e.target.value))}
                   className={styles.customSelect}
                   aria-label="Número de compras por página"
                 >
@@ -167,13 +126,15 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading}: DadosPa
                   <option value={50}>50</option>
                   <option value={100}>100</option>
                 </select>
-                <label htmlFor="resultsPerPage" className={styles.ppage}>por página</label>
+                <label htmlFor="resultsPerPage" className={styles.ppage}>
+                  por página
+                </label>
               </div>
               <div className={styles.searchContainer}>
                 <SearchInput
                   placeholder="Buscar Pagamentos"
-                  onSearch={(value) => setSearchTerm(value)} // Atualiza o termo de busca
-                  setCurrentPage={setCurrentPage} // Passando a função para resetar a página
+                  onSearch={(value) => setSearchTerm(value)}
+                  setCurrentPage={setCurrentPage}
                 />
               </div>
             </div>
@@ -182,52 +143,41 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading}: DadosPa
             <table className={styles.comprasTable}>
               <thead>
                 <tr>
-                  <th>Data</th>
                   <th>Cliente</th>
-                  <th>Valor Pagamento</th>
-                  <th>Total</th>
+                  <th>Referência</th>
+                  <th>Total Pagamento</th>
                 </tr>
               </thead>
               <tbody>
-              {currentPagamentos.length > 0 ? (
-                currentPagamentos.map((pagamento) => (
-                  <tr key={pagamento.id}>
-                    <td>{(adjustDate(pagamento.created_at))}</td>
-                    <td>{pagamento.cliente?.nome}</td>
-                    <td>
-                      {pagamento.valorPagamento.toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      })}
+                {currentPagamentos.length > 0 ? (
+                  currentPagamentos.map((pagamento, index) => (
+                    <tr key={index}>
+                      <td>{pagamento.nome}</td>
+                      <td>{pagamento.referencia}</td>
+                      <td>
+                        {pagamento.totalPagamento.toLocaleString('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={3} className={styles.noRecords}>
+                      Nenhum pagamento encontrado
                     </td>
-                    <td> - </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className={styles.noRecords}>
-                    Nenhum pagamento encontrado
-                  </td>
-                </tr>
-              )}
-            </tbody>
-
+                )}
+              </tbody>
               {currentPagamentos.length > 0 && (
                 <tfoot>
                   <tr className={styles.totalRow}>
                     <td colSpan={2} style={{ textAlign: 'left', padding: '10px' }}>
                       TOTAL
                     </td>
-
-                    <td colSpan={1} className={styles.totalValue} style={{ textAlign: 'left', paddingLeft: '7px' }}>
+                    <td className={styles.totalValue} style={{ textAlign: 'left', paddingLeft: '7px' }}>
                       {somaAtual.toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      })}
-                    </td>
-
-                    <td style={{ textAlign: 'center' }}>
-                      {totalPagamentos.toLocaleString('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
                       })}
@@ -238,7 +188,6 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading}: DadosPa
             </table>
           </div>
           <div className={styles.container}>
-            {/* Paginação do lado direito */}
             <div className={`${styles.pagination} ${currentPagamentos.length ? '' : styles.hidden}`}>
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
@@ -283,5 +232,4 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading}: DadosPa
       )}
     </div>
   );
-  
 }
