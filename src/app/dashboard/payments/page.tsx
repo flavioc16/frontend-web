@@ -6,6 +6,7 @@ import { getCookie } from "cookies-next";
 import { TablePagamentos } from "./components/tableRelatorio";
 
 interface PagamentoAgrupado {
+  created: string;
   nome: string;
   referencia: string;
   totalPagamento: number;
@@ -22,7 +23,29 @@ export default function Pagamentos() {
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
   const [totalPagamentos, setTotalPagamentos] = useState(0);
-
+  const adjustDate = (dateString: string): string => {
+    // Verifique se o dateString não é vazio ou inválido
+    if (!dateString) {
+      console.error("Data recebida é inválida:", dateString); 
+      return "Data inválida";
+    }
+  
+    const date = new Date(dateString);
+  
+    // Verificar se o objeto Date gerado é válido
+    if (isNaN(date.getTime())) {
+      console.error("Data inválida:", dateString); 
+      return "Data inválida";
+    }
+  
+    // Exibindo no formato pt-BR
+    return date.toLocaleDateString('pt-BR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
+  
   useEffect(() => {
     const hoje = new Date();
     const dataAtualFormatada = hoje.toISOString().split("T")[0];
@@ -34,7 +57,6 @@ export default function Pagamentos() {
     // Chama o fetch ao configurar os valores iniciais
     fetchPagamentos(dataAtualFormatada, dataAtualFormatada);
   }, []);
-
   async function fetchPagamentos(dataInicio: string, dataFim: string) {
     setLoading(true);
     try {
@@ -48,16 +70,27 @@ export default function Pagamentos() {
           dataFim,
         },
       });
-
-      // Garantir que os dados estejam no formato correto
+  
+      // Verifique se a resposta contém os dados esperados e mapeie corretamente
       setPagamentos({
-        pagamentos: response.data.pagamentos.map((p: any) => ({
-          nome: p.nome,
-          referencia: p.referencia,
-          totalPagamento: p.totalPagamento,
-        })),
+        pagamentos: response.data.pagamentos.map((p: any) => {
+          // Verifique se `created_at` existe, caso contrário, defina uma string vazia ou "Data inválida"
+          const createdAt = p.created_at ? adjustDate(p.created_at) : "Data inválida";
+          
+          // Verifique se o campo `cliente` e `cliente.nome` existem
+          const nome = p.cliente?.nome || "Nome não disponível";
+          const referencia = p.cliente?.referencia || "Referência não disponível";
+  
+          return {
+            created: createdAt,
+            nome: nome,
+            referencia: referencia,
+            totalPagamento: p.valorPagamento,
+          };
+        }),
         totalPagamentos: response.data.totalPagamentos,
       });
+  
       setTotalPagamentos(response.data.totalPagamentos);
     } catch (error) {
       console.error("Erro ao buscar pagamentos:", error);
@@ -65,6 +98,10 @@ export default function Pagamentos() {
       setLoading(false);
     }
   }
+  
+  
+
+  console.log(pagamentos);
 
   return (
     <main className={styles.contentArea}>

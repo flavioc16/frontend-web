@@ -8,6 +8,7 @@ import SearchInput from '@/app/dashboard/components/searchInput';
 
 // Ajuste das interfaces
 interface PagamentoAgrupado {
+  created: string;  // Atualizado para 'created' (sem o _at)
   nome: string;
   referencia: string;
   totalPagamento: number;
@@ -33,16 +34,14 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading }: DadosP
     setShowModalInfo(true);
   };
 
+ 
+
   const handleCloseModalInfo = () => {
     setShowModalInfo(false);
   };
 
-  // Função para formatação de data
-  const adjustDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-    return date.toLocaleDateString('pt-BR');
-  };
+
+
 
   // Filtrando os pagamentos com base no termo de busca
   const filteredPagamentos = useMemo(() => {
@@ -50,9 +49,9 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading }: DadosP
       const searchLower = searchTerm.trim().toLowerCase();
 
       return (
-        pagamento.nome.toLowerCase().includes(searchLower) ||
-        pagamento.referencia.toLowerCase().includes(searchLower) ||
-        pagamento.totalPagamento.toString().includes(searchLower)
+        pagamento.nome?.toLowerCase().includes(searchLower) ||
+        pagamento.referencia?.toLowerCase().includes(searchLower) ||
+        pagamento.totalPagamento?.toString().includes(searchLower)
       );
     });
 
@@ -143,7 +142,8 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading }: DadosP
             <table className={styles.comprasTable}>
               <thead>
                 <tr>
-                  <th>Cliente</th>
+                  <th>Data </th>
+                  <th>Nome</th>
                   <th>Referência</th>
                   <th>Total Pagamento</th>
                 </tr>
@@ -152,6 +152,7 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading }: DadosP
                 {currentPagamentos.length > 0 ? (
                   currentPagamentos.map((pagamento, index) => (
                     <tr key={index}>
+                      <td>{pagamento.created}</td>
                       <td>{pagamento.nome}</td>
                       <td>{pagamento.referencia}</td>
                       <td>
@@ -173,7 +174,7 @@ export function TablePagamentos({ pagamentos, totalPagamentos, loading }: DadosP
               {currentPagamentos.length > 0 && (
                 <tfoot>
                   <tr className={styles.totalRow}>
-                    <td colSpan={2} style={{ textAlign: 'left', padding: '10px' }}>
+                    <td colSpan={3} style={{ textAlign: 'left', padding: '10px' }}>
                       TOTAL
                     </td>
                     <td className={styles.totalValue} style={{ textAlign: 'left', paddingLeft: '7px' }}>
